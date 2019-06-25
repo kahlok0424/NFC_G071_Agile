@@ -1,5 +1,5 @@
 
-NFC_Test.elf:     file format elf32-littlearm
+NFC_G071_Agile.elf:     file format elf32-littlearm
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
@@ -39,11 +39,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  17 .debug_line   0000a000  00000000  00000000  00044728  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .debug_str    0008e31f  00000000  00000000  0004e728  2**0
+ 18 .debug_str    0008e325  00000000  00000000  0004e728  2**0
                   CONTENTS, READONLY, DEBUGGING
- 19 .comment      0000007b  00000000  00000000  000dca47  2**0
+ 19 .comment      0000007b  00000000  00000000  000dca4d  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00002558  00000000  00000000  000dcac4  2**2
+ 20 .debug_frame  00002558  00000000  00000000  000dcac8  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:

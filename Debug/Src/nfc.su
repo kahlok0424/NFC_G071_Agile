@@ -1,0 +1,2 @@
+nfc.c:11:6:initNFC	16	static
+nfc.c:24:6:currentAddRead	32	static

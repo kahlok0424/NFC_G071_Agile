@@ -98,19 +98,46 @@ int main(void)
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  unsigned char buffer[6];
-  unsigned char received[11];
-  buffer[0]= 0x11;
-  buffer[1]= 0x22;
-  buffer[2]= 0x33;
-  buffer[3]= 0x44;
-  buffer[4]= 0x55;
-  buffer[5]= 0x66;
+  char buffer[6];
+  buffer[0]= 0x4c;	//L
+  buffer[1]= 0x4f;	//O
+  buffer[2]= 0x55;	//U
+  buffer[3]= 0x49;	//I
+  buffer[4]= 0x53;	//S
+  buffer[5]= 0x31;	//1
+  char password[17];
+  password[0] = 0x00;
+  password[1] = 0x00;
+  password[2] = 0x00;
+  password[3] = 0x00;
+  password[4] = 0x00;
+  password[5] = 0x00;
+  password[6] = 0x00;
+  password[7] = 0x00;
+  password[8] = 0x09;
+  password[9] = 0x00;
+  password[10] = 0x00;
+  password[11] = 0x00;
+  password[12] = 0x00;
+  password[13] = 0x00;
+  password[14] = 0x00;
+  password[15] = 0x00;
+  password[16] = 0x00;
+  volatile char received[11];
+  volatile char received1[11];
+  volatile int test1;
+
 
   initNFC(&hi2c1, (NFC_UserMemory));
   //HAL_I2C_Master_Transmit(&hi2c1, (NFC_UserMemory), buffer, 5,10);
-  //HAL_I2C_Mem_Write(&hi2c1,NFC_UserMemory,0x1A,0x04,buffer,5,50);
-  currentAddRead(&hi2c1, NFC_UserMemory, received);
+  //HAL_I2C_Mem_Write(&hi2c1,NFC_UserMemory,0x3A,0x04,buffer,5,50);
+  HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, password,17,50); //present password
+  //HAL_I2C_Mem_Write(&hi2c1, NFC_UserMemory, 0x005f, 2, buffer,5,50);
+  //HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x000b,2, 0x55,1,50);
+  //currentAddRead(&hi2c1, NFC_SystemMemory, received,10,50);
+  //HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x008f, 2, received,6,50);
+  HAL_I2C_Mem_Read(&hi2c1, NFC_SystemMemory, 0x0900, 2, received,8,100);
+  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004,2, test1,1,50);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -284,7 +311,7 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(NFC_LED3_GPIO_Port, NFC_LED3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, NFC_LED2_Pin|NFC_LED1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, NFC_LED1_Pin|NFC_LED2_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin : NFC_LED3_Pin */
   GPIO_InitStruct.Pin = NFC_LED3_Pin;
@@ -293,8 +320,8 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(NFC_LED3_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : NFC_LED2_Pin NFC_LED1_Pin */
-  GPIO_InitStruct.Pin = NFC_LED2_Pin|NFC_LED1_Pin;
+  /*Configure GPIO pins : NFC_LED1_Pin NFC_LED2_Pin */
+  GPIO_InitStruct.Pin = NFC_LED1_Pin|NFC_LED2_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

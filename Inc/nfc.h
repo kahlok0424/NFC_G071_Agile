@@ -23,7 +23,7 @@
 
 //functions declaration
 void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
-void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer);
+void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer,int n,int timeout);
 
 
 #endif /* NFC_H_ */

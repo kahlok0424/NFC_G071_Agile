@@ -70,13 +70,13 @@ void Error_Handler(void);
 #define TMS_GPIO_Port GPIOA
 #define TCK_Pin GPIO_PIN_14
 #define TCK_GPIO_Port GPIOA
-#define NFC_LED2_Pin GPIO_PIN_4
-#define NFC_LED2_GPIO_Port GPIOB
-#define NFC_LED1_Pin GPIO_PIN_5
+#define NFC_LED1_Pin GPIO_PIN_4
 #define NFC_LED1_GPIO_Port GPIOB
+#define NFC_LED2_Pin GPIO_PIN_5
+#define NFC_LED2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 #define NFC_UserMemory		0xA6
-#define NFC_SystemMemory	0xAe
+#define NFC_SystemMemory	0xAE
 #define read 	1
 #define write 	0
 /* USER CODE END Private defines */

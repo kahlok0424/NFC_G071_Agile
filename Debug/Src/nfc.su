@@ -1,3 +1,8 @@
 nfc.c:11:6:initNFC	16	static
-nfc.c:24:6:currentAddRead	40	static
-nfc.c:29:6:presentI2Cpassword	64	static
+nfc.c:22:6:currentAddRead	40	static
+nfc.c:27:6:presentI2Cpassword	72	static
+nfc.c:63:6:lockI2CSecurity	64	static
+nfc.c:88:6:readReg	48	static
+nfc.c:95:6:configSystemReg	48	static
+nfc.c:105:6:writeUserMemory	40	static
+nfc.c:116:6:readUserMemory	40	static

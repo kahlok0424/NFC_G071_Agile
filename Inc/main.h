@@ -79,6 +79,7 @@ void Error_Handler(void);
 #define NFC_SystemMemory	0xAE
 #define read 	1
 #define write 	0
+#define test14  0x12345678
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -21,9 +21,26 @@ void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
 }
 
 
-void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer,int n,int timeout){
+void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer,int n){
 
-	HAL_I2C_Master_Receive(hi2c, devAddress, buffer,n ,timeout);
+	HAL_I2C_Master_Receive(hi2c, devAddress, buffer,n ,50);
 }
 
+void presentI2Cpassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password){
+	char *temp = password;
+	char pass[17];
+	//allocate the password into buffer
+	for(int i = 0; i < 8; i++){
+		pass[i] = temp[i];
+	}
+	pass[8] = presentPass;
+
+	for(int i = 0; i < 8; i++){
+		pass[i+8] = temp;
+		temp++;
+	}
+
+	//HAL_I2C_Mem_Write(hi2c,NFC_SystemMemory, I2C_PWD, Itl, pass,17,50); //present  i2c password
+
+}
 

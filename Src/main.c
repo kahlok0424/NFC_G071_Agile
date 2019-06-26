@@ -105,7 +105,7 @@ int main(void)
   buffer[3]= 0x49;	//I
   buffer[4]= 0x53;	//S
   buffer[5]= 0x31;	//1
-  char password[17];
+  volatile char password[17];
   password[0] = 0x00;
   password[1] = 0x00;
   password[2] = 0x00;
@@ -123,21 +123,49 @@ int main(void)
   password[14] = 0x00;
   password[15] = 0x00;
   password[16] = 0x00;
-  volatile char received[11];
-  volatile char received1[11];
-  volatile int test1;
+  volatile char WrongPass[17];
+  WrongPass[0] = 0x00;
+  WrongPass[1] = 0x00;
+  WrongPass[2] = 0x10;
+  WrongPass[3] = 0x10;
+  WrongPass[4] = 0x00;
+  WrongPass[5] = 0x00;
+  WrongPass[6] = 0x00;
+  WrongPass[7] = 0x00;
+  WrongPass[8] = 0x09;
+  WrongPass[9] = 0x00;
+  WrongPass[10] = 0x00;
+  WrongPass[11] = 0x00;
+  WrongPass[12] = 0x00;
+  WrongPass[13] = 0x00;
+  WrongPass[14] = 0x00;
+  WrongPass[15] = 0x00;
+  WrongPass[16] = 0x00;
+  char received[11];
+  char received1[11];
+  char test1[2];
+  char data[2];
+  data[0] = 0x00;
+  char *pass;
+  pass = I2CPassword;
+  //char test123[17];
+  //test123[0] = test14;
 
 
   initNFC(&hi2c1, (NFC_UserMemory));
   //HAL_I2C_Master_Transmit(&hi2c1, (NFC_UserMemory), buffer, 5,10);
   //HAL_I2C_Mem_Write(&hi2c1,NFC_UserMemory,0x3A,0x04,buffer,5,50);
-  HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, password,17,50); //present password
+  /*HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, pass,17,50); //present password
   //HAL_I2C_Mem_Write(&hi2c1, NFC_UserMemory, 0x005f, 2, buffer,5,50);
-  //HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x000b,2, 0x55,1,50);
+  HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x000b,2, data, 1,50);
   //currentAddRead(&hi2c1, NFC_SystemMemory, received,10,50);
-  //HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x008f, 2, received,6,50);
-  HAL_I2C_Mem_Read(&hi2c1, NFC_SystemMemory, 0x0900, 2, received,8,100);
-  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004,2, test1,1,50);
+  //HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x005f, 2, received1,6,50);
+  HAL_I2C_Mem_Read(&hi2c1, NFC_SystemMemory, 0x000b, 2, received1,2,50);
+  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);
+  HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, WrongPass,17,50); //present wrong password
+  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);*/
+  presentI2Cpassword(&hi2c1, NFC_UserMemory, I2CPassword);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -147,6 +175,10 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	//HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x000b,2, address,1,50);
+	//HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, password,17,50); //present password
+	//HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x005f, 2, received1,6,50);
+	//HAL_Delay(50);
   }
   /* USER CODE END 3 */
 }
@@ -166,10 +198,8 @@ void SystemClock_Config(void)
   HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSIDiv = RCC_HSI_DIV1;
-  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -179,7 +209,7 @@ void SystemClock_Config(void)
   */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
@@ -214,7 +244,7 @@ static void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.Timing = 0x00303D5B;
+  hi2c1.Init.Timing = 0x2000090E;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
   hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;

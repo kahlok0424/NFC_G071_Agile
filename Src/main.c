@@ -148,14 +148,13 @@ int main(void)
   data[0] = 0x00;
   char *pass;
   pass = I2CPassword;
-  //char test123[17];
-  //test123[0] = test14;
 
 
   initNFC(&hi2c1, (NFC_UserMemory));
   //HAL_I2C_Master_Transmit(&hi2c1, (NFC_UserMemory), buffer, 5,10);
   //HAL_I2C_Mem_Write(&hi2c1,NFC_UserMemory,0x3A,0x04,buffer,5,50);
-  /*HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, pass,17,50); //present password
+  //HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, pass,17,50); //present password
+  presentI2Cpassword(&hi2c1, NFC_UserMemory, I2CPassword);
   //HAL_I2C_Mem_Write(&hi2c1, NFC_UserMemory, 0x005f, 2, buffer,5,50);
   HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x000b,2, data, 1,50);
   //currentAddRead(&hi2c1, NFC_SystemMemory, received,10,50);
@@ -163,8 +162,7 @@ int main(void)
   HAL_I2C_Mem_Read(&hi2c1, NFC_SystemMemory, 0x000b, 2, received1,2,50);
   HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);
   HAL_I2C_Mem_Write(&hi2c1,NFC_SystemMemory, 0x0900,2, WrongPass,17,50); //present wrong password
-  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);*/
-  presentI2Cpassword(&hi2c1, NFC_UserMemory, I2CPassword);
+  HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);
 
   /* USER CODE END 2 */
 

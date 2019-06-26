@@ -21,7 +21,7 @@
 #define NFC_LED3_PORT	NFC_LED3_GPIO_Port
 
 //defines for i2c password
-#define I2CPassword		0x0012000000000000
+#define I2CPassword		0x0000
 
 //defines for NFC device register address
 #define I2C_PWD		0x0900
@@ -32,6 +32,7 @@
 
 //defines for others
 #define Itl	2
+
 //functions declaration
 void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
 void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer,int n);

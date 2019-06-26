@@ -27,20 +27,39 @@ void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress, char *buffer,i
 }
 
 void presentI2Cpassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password){
-	char *temp = password;
+	char *temp;
+	*temp = password;
 	char pass[17];
-	//allocate the password into buffer
-	for(int i = 0; i < 8; i++){
-		pass[i] = temp[i];
+	  pass[0] = 0x00;
+	  pass[1] = 0x00;
+	  pass[2] = 0x00;
+	  pass[3] = 0x00;
+	  pass[4] = 0x00;
+	  pass[5] = 0x00;
+	  pass[6] = 0x00;
+	  pass[7] = 0x00;
+	  pass[8] = 0x09;
+	  pass[9] = 0x00;
+	  pass[10] = 0x00;
+	  pass[11] = 0x00;
+	  pass[12] = 0x00;
+	  pass[13] = 0x00;
+	  pass[14] = 0x00;
+	  pass[15] = 0x00;
+	  pass[16] = 0x00;
+	//allocate the pass into buffer
+	/*for(int i = 0; i < 8; i++){
+		pass[i] = *temp;
+		//temp++;
 	}
 	pass[8] = presentPass;
 
 	for(int i = 0; i < 8; i++){
-		pass[i+8] = temp;
-		temp++;
-	}
+		pass[i+8] = *temp;
+		//temp++;
+	}*/
 
-	//HAL_I2C_Mem_Write(hi2c,NFC_SystemMemory, I2C_PWD, Itl, pass,17,50); //present  i2c password
+	HAL_I2C_Mem_Write(hi2c,NFC_SystemMemory, I2C_PWD, Itl, pass,17,50); //present  i2c password
 
 }
 

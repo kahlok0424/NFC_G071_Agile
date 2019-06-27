@@ -59,6 +59,9 @@
 //defines for command
 #define presentPass		0x09
 #define writePass		0x07
+#define RF_ENABLE		0x00
+#define RF_DISABLE		0x01    //rf command interpreted, not executed
+#define RF_SLEEP		0x03	//disable all RF communication
 
 //defines for others
 #define Itl	2
@@ -66,12 +69,15 @@
 //functions declaration
 void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
 void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer,int n);
-void presentI2Cpassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password);
+void unlockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password);
 void lockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
+void changeI2CPassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint8_t *newPassword);
+void readI2CPassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint8_t *password);
 void readReg(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint16_t regAddress, uint8_t *buffer,int n);
-void configSystemReg(I2C_HandleTypeDef *hi2c, uint16_t regAddress, uint8_t data);
+void writeSystemReg(I2C_HandleTypeDef *hi2c, uint16_t regAddress, uint8_t data);
 void writeUserMemory(I2C_HandleTypeDef *hi2c, int area, uint16_t address, uint8_t *data, int n);
 void readUserMemory(I2C_HandleTypeDef *hi2c, int area, uint16_t address, uint8_t *data, int n);
-
+void NFC04A1_setRFMode(I2C_HandleTypeDef *hi2c, uint8_t mode);
+void NFC04A1_setRFModeDyn(I2C_HandleTypeDef *hi2c,uint8_t mode);
 
 #endif /* NFC_H_ */

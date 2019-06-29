@@ -57,8 +57,8 @@
 #define IT_STS_Dyn		0x2005
 
 //defines for command
-#define presentPass		0x09
-#define writePass		0x07
+#define PRESENTPASS		0x09
+#define CHANGEPASS		0x07
 #define RF_ENABLE		0x00
 #define RF_DISABLE		0x01    //rf command interpreted, not executed
 #define RF_SLEEP		0x03	//disable all RF communication

@@ -156,7 +156,6 @@ int main(void)
   writeSystemReg(&hi2c1, I2CSS, 0x00);
   writeUserMemory(&hi2c1, 1, 0x00, empty, 6);
   readReg(&hi2c1, NFC_SystemMemory, 0x0000, data,1);
-  //lockI2CSecurity(&hi2c1, NFC_SystemMemory);
   readUserMemory(&hi2c1, 1, 0x00, received1, 20);
   //HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);
   readReg(&hi2c1, NFC_DynMemory, I2C_SSO_Dyn, test1, 1);

@@ -30,40 +30,25 @@ void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer
  * @param device address
  * @param password
  */
-void unlockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password){
-	//char *temp;
-	//*temp = password;
-	uint8_t pass[17];
-	  pass[0] = 0x00;
-	  pass[1] = 0x00;
-	  pass[2] = 0x00;
-	  pass[3] = 0x00;
-	  pass[4] = 0x00;
-	  pass[5] = 0x00;
-	  pass[6] = 0x00;
-	  pass[7] = 0x00;
-	  pass[8] = 0x09;
-	  pass[9] = 0x00;
-	  pass[10] = 0x00;
-	  pass[11] = 0x00;
-	  pass[12] = 0x00;
-	  pass[13] = 0x00;
-	  pass[14] = 0x00;
-	  pass[15] = 0x00;
-	  pass[16] = 0x00;
-	//allocate the pass into buffer
-	/*for(int i = 0; i < 8; i++){
-		pass[i] = *temp;
-		//temp++;
-	}
-	pass[8] = presentPass;
+void unlockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint8_t *password){
 
-	for(int i = 0; i < 8; i++){
-		pass[i+8] = *temp;
-		//temp++;
+	uint8_t pass[18];
+	//allocate the pass into buffer
+	/*for(int j = 0; j<2; j++){
+		for( i = 0; i < 8; i++){
+			pass[i] = password[i];
+		}
+		pass[8] = PRESENTPASS;
 	}*/
+	for( i = 0; i < 8; i++){
+		pass[i] = password[i];
+	}
+	pass[8] = PRESENTPASS;
+	for(int i = 0; i < 8; i++){
+		pass[i+9] = password[i];
+	}
 	HAL_I2C_Mem_Write(hi2c,devAddress, I2C_PWD, Itl, pass,17,50); //present  i2c password
-	HAL_Delay(10);
+	//HAL_Delay(10);
 }
 
 /**

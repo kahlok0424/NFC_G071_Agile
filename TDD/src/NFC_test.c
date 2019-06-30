@@ -21,6 +21,17 @@ void unlockI2CSecurity(uint16_t devAddress, uint8_t *password, uint8_t *pass){
 		pass[i+9] = password[i];
 	}
 	return pass;
-	//HAL_I2C_Mem_Write(hi2c,devAddress, I2C_PWD, Itl, pass,17,50); //present  i2c password
-	//HAL_Delay(10);
+}
+
+void lockI2CSecurity(uint16_t devAddress, uint8_t *WrongPass){
+
+	//uint8_t WrongPass[17];
+
+	for(int i = 0; i < 8; i++){
+		WrongPass[i] = i+1;
+	}
+	WrongPass[8] = PRESENTPASS;
+	for(int i = 0; i < 8; i++){
+		WrongPass[i+9] = i+2;
+	}
 }

@@ -80,6 +80,7 @@ void Error_Handler(void);
 #define NFC_DynMemory		0xA6
 #define read 	1
 #define write 	0
+I2C_HandleTypeDef hi2c1;
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

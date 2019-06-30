@@ -43,7 +43,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-I2C_HandleTypeDef hi2c1;
+//extern I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef hlpuart1;
 
@@ -106,12 +106,12 @@ int main(void)
   buffer[4]= 0x53;	//S
   buffer[5]= 0x31;	//1
   uint8_t buffer1[6];
-  buffer[0]= 0x48;	//H
-  buffer[1]= 0x45;	//E
-  buffer[2]= 0x4c;	//L
-  buffer[3]= 0x4c;	//L
-  buffer[4]= 0x4f;	//O
-  buffer[5]= 0x33;	//3
+  buffer1[0]= 0x48;	//H
+  buffer1[1]= 0x45;	//E
+  buffer1[2]= 0x4c;	//L
+  buffer1[3]= 0x4c;	//L
+  buffer1[4]= 0x4f;	//O
+  buffer1[5]= 0x33;	//3
   uint8_t empty[10];
   empty[0] = 0x0;
   empty[1] = 0x0;
@@ -123,42 +123,28 @@ int main(void)
   empty[7] = 0x0;
   empty[8] = 0x0;
   empty[9] = 0x0;
-  uint8_t password[17];
-  password[0] = 0x07;
-  password[1] = 0x07;
-  password[2] = 0x07;
-  password[3] = 0x07;
-  password[4] = 0x08;
-  password[5] = 0x08;
-  password[6] = 0x08;
-  password[7] = 0x08;
-  password[8] = 0x07;
-  password[9] = 0x07;
-  password[10] = 0x07;
-  password[11] = 0x07;
-  password[12] = 0x07;
-  password[13] = 0x08;
-  password[14] = 0x08;
-  password[15] = 0x08;
-  password[16] = 0x08;
+  uint8_t password[8] = {0x00,0x00,0x00,0x20,0x30,0x44,0x00,0x00};
   uint8_t received[11];
   uint8_t received1[20];
   uint8_t test1[2];
   uint8_t data[2];
   data[0] = 0x00;
+  uint8_t test2[8];
 
   initNFC(&hi2c1, (NFC_UserMemory));
-  NFC04A1_setRFMode(&hi2c1,RF_ENABLE);
-  changeI2CPassword(&hi2c1, NFC_SystemMemory,password);
-  readI2CPassword(&hi2c1,NFC_SystemMemory,received);
+  NFC04A1_setRFMode(password,RF_ENABLE);
+  //changeI2CPassword(&hi2c1, NFC_SystemMemory,password);
+  //readI2CPassword(&hi2c1,NFC_SystemMemory,received);
+  I2CWrite(NFC_UserMemory,0x77,buffer1,6);
+  I2CRead(NFC_UserMemory,0x77, test2, 6);
   //HAL_I2C_Master_Transmit(&hi2c1, (NFC_UserMemory), buffer, 5,10);
   //presentI2Cpassword(&hi2c1, NFC_SystemMemory, I2CPassword);
-  writeSystemReg(&hi2c1, I2CSS, 0x00);
-  writeUserMemory(&hi2c1, 1, 0x00, empty, 6);
-  readReg(&hi2c1, NFC_SystemMemory, 0x0000, data,1);
-  readUserMemory(&hi2c1, 1, 0x00, received1, 20);
+  //writeSystemReg(I2CSS, 0x00);
+  writeUserMemory(1, 0x00, empty, 6);
+  //readReg(&hi2c1, NFC_SystemMemory, 0x0000, data,1);
+  readUserMemory(1, 0x00, received1, 20);
   //HAL_I2C_Mem_Read(&hi2c1, NFC_UserMemory, 0x2004, 2, test1, 1, 50);
-  readReg(&hi2c1, NFC_DynMemory, I2C_SSO_Dyn, test1, 1);
+  //readReg(&hi2c1, NFC_DynMemory, I2C_SSO_Dyn, test1, 1);
 
   /* USER CODE END 2 */
 

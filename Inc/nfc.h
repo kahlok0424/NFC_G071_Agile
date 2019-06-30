@@ -68,16 +68,18 @@
 
 //functions declaration
 void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
+void I2CRead(uint16_t devAddress,uint16_t memAddress, uint8_t *data, int n);
+void I2CWrite(uint16_t devAddress,uint16_t memAddress, uint8_t *data, int n);
 void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer,int n);
-void unlockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress, int password);
-void lockI2CSecurity(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
-void changeI2CPassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint8_t *newPassword);
-void readI2CPassword(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint8_t *password);
+void unlockI2CSecurity(uint16_t devAddress, uint8_t *password);
+void lockI2CSecurity(uint16_t devAddress);
+void changeI2CPassword(uint16_t devAddress, uint8_t *oldPass, uint8_t *newPassword);
+void readI2CPassword(uint16_t devAddress, uint8_t *password, uint8_t *ans);
 void readReg(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint16_t regAddress, uint8_t *buffer,int n);
-void writeSystemReg(I2C_HandleTypeDef *hi2c, uint16_t regAddress, uint8_t data);
-void writeUserMemory(I2C_HandleTypeDef *hi2c, int area, uint16_t address, uint8_t *data, int n);
-void readUserMemory(I2C_HandleTypeDef *hi2c, int area, uint16_t address, uint8_t *data, int n);
-void NFC04A1_setRFMode(I2C_HandleTypeDef *hi2c, uint8_t mode);
-void NFC04A1_setRFModeDyn(I2C_HandleTypeDef *hi2c,uint8_t mode);
+void writeSystemReg(uint16_t regAddress,uint8_t *password, uint8_t data);
+void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
+void readUserMemory(int area, uint16_t address, uint8_t *data, int n);
+void NFC04A1_setRFMode(uint8_t *password, uint8_t mode);
+void NFC04A1_setRFModeDyn(uint8_t *password, uint8_t mode);
 
 #endif /* NFC_H_ */

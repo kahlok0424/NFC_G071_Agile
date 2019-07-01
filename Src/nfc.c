@@ -21,11 +21,11 @@ void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
 }
 
 void I2CRead(uint16_t devAddress,uint16_t memAddress, uint8_t *data, int n){
-	HAL_I2C_Mem_Read(&hi2c1,devAddress, memAddress, 2, data,n,50);
+	HAL_I2C_Mem_Read(&hi2c1, devAddress, memAddress, 2, data, n, 50);
 }
 
 void I2CWrite(uint16_t devAddress,uint16_t memAddress, uint8_t *data, int n){
-	HAL_I2C_Mem_Write(&hi2c1,devAddress, memAddress, 2, data,n,50);
+	HAL_I2C_Mem_Write(&hi2c1, devAddress, memAddress, 2, data, n, 50);
 }
 
 void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer,int n){
@@ -38,9 +38,9 @@ void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer
  * @param device address
  * @param password
  */
-void unlockI2CSecurity(uint16_t devAddress, uint8_t *password){
+void unlockI2CSecurity(uint8_t *password){
 
-	uint8_t pass[18];
+	uint8_t pass[17];
 	//allocate the pass into buffer
 	/*for(int j = 0; j<2; j++){
 		for( i = 0; i < 8; i++){
@@ -55,7 +55,8 @@ void unlockI2CSecurity(uint16_t devAddress, uint8_t *password){
 	for(int i = 0; i < 8; i++){
 		pass[i+9] = password[i];
 	}
-	I2CWrite(devAddress, I2C_PWD, pass,17); //present  i2c password
+
+	I2CWrite(NFC_SYSTEMMEMORY, I2C_PWD, pass,17); //present i2c password
 	//HAL_Delay(10);
 }
 
@@ -63,7 +64,7 @@ void unlockI2CSecurity(uint16_t devAddress, uint8_t *password){
  * @description lock the i2c security session by presenting a wrong password
  * @param device address
  */
-void lockI2CSecurity(uint16_t devAddress){
+void lockI2CSecurity(){
 
 	uint8_t WrongPass[17];
 
@@ -75,7 +76,7 @@ void lockI2CSecurity(uint16_t devAddress){
 		WrongPass[i+9] = i+2;
 	}
 
-	I2CWrite(devAddress, I2C_PWD, WrongPass,17); //present wrong i2c password
+	I2CWrite(NFC_SYSTEMMEMORY, I2C_PWD, WrongPass,17); //present wrong i2c password
 	HAL_Delay(10);
 }
 
@@ -85,18 +86,18 @@ void lockI2CSecurity(uint16_t devAddress){
  * @param old password
  * @param new password
  */
-void changeI2CPassword(uint16_t devAddress,uint8_t *oldpass, uint8_t *newPassword){
+void changeI2CPassword(uint8_t *oldpass, uint8_t *newPassword){
 
-	unlockI2CSecurity(devAddress, oldpass); //unlock i2c
-	I2CWrite(devAddress, I2C_PWD, newPassword,17); //write new password
-	lockI2CSecurity(devAddress);
+	unlockI2CSecurity(oldpass); //unlock i2c
+	I2CWrite(NFC_SYSTEMMEMORY, I2C_PWD, newPassword,17); //write new password
+	lockI2CSecurity();
 	HAL_Delay(10);
 }
 
-void readI2CPassword(uint16_t devAddress, uint8_t *password, uint8_t *ans){
-	unlockI2CSecurity(devAddress, password); //unlock i2c
-	I2CRead(devAddress, I2C_PWD, ans, 8);
-	lockI2CSecurity(devAddress);
+void readI2CPassword(uint8_t *password, uint8_t *ans){
+	unlockI2CSecurity(password); //unlock i2c
+	I2CRead(NFC_SYSTEMMEMORY, I2C_PWD, ans, 8);
+	lockI2CSecurity();
 }
 
 /**
@@ -106,10 +107,10 @@ void readI2CPassword(uint16_t devAddress, uint8_t *password, uint8_t *ans){
  * @param buffer
  * @param number of bytes to read
  */
-void readReg(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint16_t regAddress, uint8_t *buffer,int n){
+void readSystemMemory(uint16_t regAddress, uint8_t *buffer,int n){
 
 	//presentI2Cpassword(hi2c, NFC_SystemMemory, 0x00);
-	HAL_I2C_Mem_Read(hi2c, devAddress, regAddress, Itl, buffer, n, 50);
+	I2CRead(NFC_SYSTEMMEMORY, regAddress, buffer, n);
 	//lockI2CSecurity(hi2c, NFC_SystemMemory);
 }
 
@@ -118,14 +119,14 @@ void readReg(I2C_HandleTypeDef *hi2c, uint16_t devAddress, uint16_t regAddress, 
  * @param device address
  * @param data to write
  */
-void writeSystemReg(uint16_t regAddress, uint8_t *password, uint8_t data){
+void writeSystemMemory(uint16_t regAddress, uint8_t *password, uint8_t data){
 
 	uint8_t buffer[1];
 	buffer[0] = data;
 
-	unlockI2CSecurity(NFC_SystemMemory, password);
-	I2CWrite(NFC_SystemMemory, regAddress, buffer, 1);
-	lockI2CSecurity(NFC_SystemMemory);
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY, regAddress, buffer, 1);
+	lockI2CSecurity();
 }
 
 /**
@@ -138,7 +139,7 @@ void writeSystemReg(uint16_t regAddress, uint8_t *password, uint8_t data){
 void writeUserMemory(int area, uint16_t address, uint8_t *data, int n){
 
 	if(area == 1){
-		I2CWrite(NFC_UserMemory, address, data, n);
+		I2CWrite(NFC_USERMEMORY, address, data, n);
 	}
 	else{
 		//waiting to implement
@@ -156,7 +157,7 @@ void writeUserMemory(int area, uint16_t address, uint8_t *data, int n){
 void readUserMemory(int area, uint16_t address, uint8_t *data, int n){
 
 	if(area == 1){
-		I2CRead(NFC_UserMemory, address, data, n);
+		I2CRead(NFC_USERMEMORY, address, data, n);
 	}
 	else{
 		//waiting to implement
@@ -166,12 +167,12 @@ void readUserMemory(int area, uint16_t address, uint8_t *data, int n){
 
 void NFC04A1_setRFMode(uint8_t *password, uint8_t mode){
 	//unlockI2CSecurity(NFC_SystemMemory,0x00);
-	writeSystemReg(RF_MNGT, password, mode);
+	writeSystemMemory(RF_MNGT, password, mode);
 	//lockI2CSecurity(NFC_SystemMemory);
 }
 
 void NFC04A1_setRFModeDyn(uint8_t *password, uint8_t mode){
 	//unlockI2CSecurity(NFC_SystemMemory,0x00);
-	writeSystemReg(RF_MNGT_Dyn, password, mode);
+	writeSystemMemory(RF_MNGT_DYN, password, mode);
 	//lockI2CSecurity(NFC_SystemMemory);
 }

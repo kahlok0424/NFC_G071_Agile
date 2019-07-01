@@ -75,9 +75,6 @@ void Error_Handler(void);
 #define NFC_LED2_Pin GPIO_PIN_5
 #define NFC_LED2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-#define NFC_UserMemory		0xA6
-#define NFC_SystemMemory	0xAE
-#define NFC_DynMemory		0xA6
 #define read 	1
 #define write 	0
 I2C_HandleTypeDef hi2c1;

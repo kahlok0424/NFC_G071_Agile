@@ -11,7 +11,8 @@
 #define PRESENTPASS       0x09
 #define CHANGEPASS        0x07
 
-void unlockI2CSecurity(uint16_t devAddress, uint8_t *password, uint8_t *pass);
-void lockI2CSecurity(uint16_t devAddress, uint8_t *WrongPass);
+void unlockI2CSecurity(uint8_t *password, uint8_t *pass);
+void lockI2CSecurity(uint8_t *WrongPass);
+void changeI2CSecurity(uint8_t *oldPass, uint8_t *newPass, uint8_t *ans);
 
 #endif // _NFC_TEST_H

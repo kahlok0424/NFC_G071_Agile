@@ -23,7 +23,7 @@
 //defines for NFC04A device address
 #define NFC_USERMEMORY		0xA6
 #define NFC_SYSTEMMEMORY	0xAE
-#define NFC_DYNMEMORY	0xA6
+#define NFC_DYNAMICMEMORY	0xA6
 
 //NFC device static register address
 #define GPO				0x0000
@@ -61,27 +61,38 @@
 //defines for command
 #define PRESENTPASS		0x09
 #define CHANGEPASS		0x07
-#define RF_ENABLE		0x00
-#define RF_DISABLE		0x01    //rf command interpreted, not executed
-#define RF_SLEEP		0x03	//disable all RF communication
+
+//RF mode typedef
+typedef enum rf_mode{
+	 RF_ENABLE 	= 0x00,
+	 RF_DISABLE = 0x01,
+	 RF_SLEEP	= 0x03,
+	}RF_MODE;
+
+//Fast transfer mode typedef
+typedef enum ftm_mode{
+	 FTM_DISABLE 	= 0x00,
+	 FTM_ENABLE		= 0x01,
+	}FTM_MODE;
 
 //defines for others
-#define Itl	2
 
 //functions declaration
 void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
 void I2CRead(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
 void I2CWrite(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
-void currentAddRead(I2C_HandleTypeDef *hi2c, uint16_t devAddress,uint8_t *buffer,int n);
 void unlockI2CSecurity(uint8_t *password);
 void lockI2CSecurity();
 void changeI2CPassword(uint8_t *oldPass, uint8_t *newPassword);
 void readI2CPassword(uint8_t *password, uint8_t *ans);
 void readSystemMemory(uint16_t regAddress, uint8_t *buffer,int n);
 void writeSystemMemory(uint16_t regAddress,uint8_t *password, uint8_t data);
+void readDynamicReg(uint16_t regAddress, uint8_t *buffer);
+void writeDynamicReg(uint16_t regAddress, uint8_t data);
 void readUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
-void NFC04A1_setRFMode(uint8_t *password, uint8_t mode);
-void NFC04A1_setRFModeDyn(uint8_t *password, uint8_t mode);
+void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
+void NFC04A1_setRFModeDyn(RF_MODE mode);
+void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 
 #endif /* NFC_H_ */

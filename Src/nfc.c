@@ -209,8 +209,16 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	lockI2CSecurity();
 }
 
-void setAreaSize(int areaNum){
+void set2Area(uint8_t *password, uint16_t size){
 
+	uint8_t temp[2];
+	temp[0] = 0xff;
+	temp[1] = (size);
 
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+1, 1);
+	lockI2CSecurity();
 }
 

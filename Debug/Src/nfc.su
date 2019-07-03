@@ -14,3 +14,4 @@ nfc.c:181:6:readUserMemory	24	static
 nfc.c:191:6:NFC04A1_setRFMode	16	static
 nfc.c:195:6:NFC04A1_setRFModeDyn	16	static
 nfc.c:199:6:configFTM	32	static
+nfc.c:212:6:set2Area	32	static

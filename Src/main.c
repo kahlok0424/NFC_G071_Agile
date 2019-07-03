@@ -133,15 +133,19 @@ int main(void)
 
   initNFC(&hi2c1, NFC_USERMEMORY);
   NFC04A1_setRFMode(password,RF_ENABLE);
-  configFTM(password, FTM_ENABLE, 0x00);
+  configFTM(password, FTM_DISABLE, 0x00);
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   readSystemMemory(MB_WDG,test2,1);
   readSystemMemory(MB_MODE,test2+1,1);
   //NFC04A1_setRFModeDyn(RF_ENABLE);
   //changeI2CPassword(oldPassword,password);
   //readI2CPassword(password,received);
-  I2CWrite(NFC_USERMEMORY,0x84,buffer1,6);
-  I2CRead(NFC_USERMEMORY,0x84, test1, 6);
+  writeSystemMemory(I2CSS,password, 0x00);
+  readSystemMemory(I2CSS, data,1);
+  set2Area(password, 0x03);
+  I2CWrite(NFC_USERMEMORY,0x7E,buffer1,2);
+  I2CWrite(NFC_USERMEMORY,0x80,buffer1,4);
+  I2CRead(NFC_USERMEMORY,0x7E, test1, 6);
   lockI2CSecurity();
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   writeSystemMemory(I2CSS,password, 0x55);

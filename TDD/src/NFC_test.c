@@ -20,7 +20,6 @@ void unlockI2CSecurity(uint8_t *password, uint8_t *pass){
 	for(int i = 0; i < 8; i++){
 		pass[i+9] = password[i];
 	}
-	return pass;
 }
 
 void lockI2CSecurity(uint8_t *WrongPass){

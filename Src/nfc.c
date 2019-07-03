@@ -209,3 +209,8 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	lockI2CSecurity();
 }
 
+void setAreaSize(int areaNum){
+
+
+}
+

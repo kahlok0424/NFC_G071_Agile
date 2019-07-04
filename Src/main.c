@@ -133,8 +133,8 @@ int main(void)
   uint8_t I2CsecurityStatus[1];
   uint8_t data[1];
 
-  initNFC(&hi2c1, NFC_USERMEMORY);
-  NFC04A1_setRFMode(password,RF_DISABLE);
+  //initNFC(&hi2c1, NFC_USERMEMORY);
+  NFC04A1_setRFMode(password,RF_ENABLE);
   configFTM(password, FTM_DISABLE, 0x00);
   set1Area(password);
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);

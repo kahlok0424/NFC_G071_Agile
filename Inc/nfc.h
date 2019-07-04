@@ -8,9 +8,9 @@
 #ifndef NFC_H_
 #define NFC_H_
 
-#include "main.h"
+//#include "main.h"
 #include "stdint.h"
-#include "stm32g0xx_hal_def.h"
+//#include "stm32g0xx_hal_def.h"
 
 //define for leds on nfc
 #define NFC_LED1		NFC_LED1_Pin
@@ -78,7 +78,7 @@ typedef enum ftm_mode{
 //defines for others
 
 //functions declaration
-void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress);
+//void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress); //comment for development
 void I2CRead(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
 void I2CWrite(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
 void unlockI2CSecurity(uint8_t *password);
@@ -94,8 +94,10 @@ void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
+int checkAreaSizeValidity(int size);
 void set1Area(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
-void set3Area(uint8_t *password, uint16_t sizeA3, uint16_t sizeA2);
+void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);
+void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3);
 
 #endif /* NFC_H_ */

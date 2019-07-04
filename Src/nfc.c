@@ -6,13 +6,13 @@
  */
 
 #include "nfc.h"
-#include "main.h"
+//#include "main.h"
 #include "i2c.h"
-#include "stm32g0xx_hal.h"
+//#include "stm32g0xx_hal.h"
 
-void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
+/*void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
 
-	if(HAL_I2C_IsDeviceReady(hi2c, devAddress,3,50) == HAL_OK){
+	if(HAL_I2C_IsDeviceReady(hi2c, devAddress,3,50) == 0){
 		HAL_GPIO_WritePin(NFC_LED1_PORT,NFC_LED1,1);
 		//HAL_GPIO_WritePin(NFC_LED2_PORT,NFC_LED2,1);
 	}
@@ -21,7 +21,7 @@ void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
 		HAL_GPIO_WritePin(NFC_LED1_PORT,NFC_LED2,0);
 		HAL_GPIO_WritePin(NFC_LED2_PORT,NFC_LED3,0);
 	}
-}
+}*/
 
 /**
  * @description present the i2c password and unlock i2c security session
@@ -46,7 +46,6 @@ void unlockI2CSecurity(uint8_t *password){
 	}
 
 	I2CWrite(NFC_SYSTEMMEMORY, I2C_PWD, pass,17); //present i2c password
-	//HAL_Delay(10);
 }
 
 /**
@@ -199,6 +198,15 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	lockI2CSecurity();
 }
 
+int checkAreaSizeValidity(int size){
+	if( (size%32) == 0 && size <= 512){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
 /**
  * @brief configure the user memory into 1 area and the area cover all user memory
  * @param password to unlock I2C security
@@ -224,49 +232,60 @@ void set1Area(uint8_t *password){
 void set2Area(uint8_t *password, uint16_t size){
 
 	uint8_t temp[2];
-	temp[0] = 0xff;
-	temp[1] = (size/32)-1;
-
-	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+1, 1);
-	lockI2CSecurity();
-}
-
-void set3Area(uint8_t *password, uint16_t sizeA2, uint16_t sizeA1){
-
-	uint8_t temp[3];
 	temp[0] = 0xf;
-	temp[1] = sizeA2;
-	temp[2] = sizeA1;
-
-	if( (sizeA2 > sizeA1)== 1 ){
+	temp[1] = (size/32)-1;
+	if( checkAreaSizeValidity(size) ){
 		unlockI2CSecurity(password);
 		I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
-		I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp+1, 1);
-		I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
+		I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp, 1);
+		I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+1, 1);
 		lockI2CSecurity();
 	}
 	else{
-
+		set1Area(password);
 	}
 }
 
-void set4Area(uint8_t *password, uint16_t sizeA3, uint16_t sizeA2, uint16_t sizeA1){
+void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2){
+
+	uint8_t temp[3];
+	temp[0] = 0xf;
+	temp[1] = (sizeA2/32)-1;
+	temp[2] = (sizeA1/32)-1;
+	if( checkAreaSizeValidity(sizeA1) && checkAreaSizeValidity(sizeA2)){
+		if( (sizeA2 > sizeA1)== 1 ){
+			unlockI2CSecurity(password);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp+1, 1);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
+			lockI2CSecurity();
+		}else{
+			set1Area(password);
+		}
+	}
+	else{
+		set1Area(password);
+	}
+}
+
+void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3){
 
 	uint8_t temp[3];
 	temp[0] = sizeA3;
 	temp[1] = sizeA2;
 	temp[2] = sizeA1;
-	if( (sizeA3 > sizeA2 == 1) & (sizeA2 > sizeA1 == 1) ){
-		unlockI2CSecurity(password);
-		I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
-		I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp+1, 1);
-		I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
-		lockI2CSecurity();
+	if( checkAreaSizeValidity(sizeA1) && checkAreaSizeValidity(sizeA2) && checkAreaSizeValidity(sizeA3)){
+		if( ((sizeA3 > sizeA2) == 1) && ((sizeA2 > sizeA1) == 1) ){
+			unlockI2CSecurity(password);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp+1, 1);
+			I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
+			lockI2CSecurity();
+		}else{
+			set1Area(password);
+		}
 	}
 	else{
-
+		set1Area(password);
 	}
 }

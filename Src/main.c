@@ -25,6 +25,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdint.h"
 #include "nfc.h"
+#include "i2c.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -128,12 +129,14 @@ int main(void)
   uint8_t received[11];
   uint8_t test1[8];
   uint8_t test2[4];
+  uint8_t ENDA[3];
   uint8_t I2CsecurityStatus[1];
   uint8_t data[1];
 
   initNFC(&hi2c1, NFC_USERMEMORY);
-  NFC04A1_setRFMode(password,RF_ENABLE);
+  NFC04A1_setRFMode(password,RF_DISABLE);
   configFTM(password, FTM_DISABLE, 0x00);
+  set1Area(password);
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   readSystemMemory(MB_WDG,test2,1);
   readSystemMemory(MB_MODE,test2+1,1);
@@ -142,17 +145,18 @@ int main(void)
   //readI2CPassword(password,received);
   writeSystemMemory(I2CSS,password, 0x00);
   readSystemMemory(I2CSS, data,1);
-  set2Area(password, 0x03);
-  I2CWrite(NFC_USERMEMORY,0x7E,buffer1,2);
+  set2Area(password, 64);
+  I2CWrite(NFC_USERMEMORY,62,buffer1,2);
   I2CWrite(NFC_USERMEMORY,0x80,buffer1,4);
   I2CRead(NFC_USERMEMORY,0x7E, test1, 6);
+  readUserMemory(1,0x80,test1,3);
   lockI2CSecurity();
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
-  writeSystemMemory(I2CSS,password, 0x55);
+  //writeSystemMemory(I2CSS,password, 0x55);
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   writeUserMemory(1, 0x66, buffer, 6);
   readSystemMemory(I2CSS, data,1);
-  readUserMemory(1, 0x066, test1, 6);
+  readUserMemory(1, 0x66, test1, 6);
 
   /* USER CODE END 2 */
 

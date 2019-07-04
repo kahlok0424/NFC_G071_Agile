@@ -1,4 +1,4 @@
-Src/nfc.o: ../Src/nfc.c ../Inc/nfc.h ../Inc/main.h \
+Src/i2c.o: ../Src/i2c.c ../Inc/nfc.h ../Inc/main.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal.h \
  ../Inc/stm32g0xx_hal_conf.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h \

@@ -27,7 +27,8 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h ../Inc/nfc.h \
- ../Inc/main.h ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_def.h
+ ../Inc/main.h ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_def.h \
+ ../Inc/i2c.h
 
 ../Inc/main.h:
 
@@ -92,3 +93,5 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
 ../Inc/main.h:
 
 ../Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_def.h:
+
+../Inc/i2c.h:

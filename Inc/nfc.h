@@ -94,6 +94,8 @@ void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
+void set1Area(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
+void set3Area(uint8_t *password, uint16_t sizeA3, uint16_t sizeA2);
 
 #endif /* NFC_H_ */

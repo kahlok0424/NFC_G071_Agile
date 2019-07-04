@@ -66,31 +66,31 @@ void test_NFC_test_changeI2CSecurity_expect_correct(void)
 
 void test_checkAreaSizeValidity_given_128_expect_true(void){
 
-	int check = checkAreaSizeValidity(128);
+	int check = checkAreaSizeValidity(128,512);
 	TEST_ASSERT_TRUE(check);
 }
 
 void test_checkAreaSizeValidity_given_32_expect_true(void){
 
-	int check = checkAreaSizeValidity(32);
+	int check = checkAreaSizeValidity(32,512);
 	TEST_ASSERT_TRUE(check);
 }
 
 void test_checkAreaSizeValidity_given_18_expect_false(void){
 
-	int check = checkAreaSizeValidity(18);
+	int check = checkAreaSizeValidity(18,512);
 	TEST_ASSERT_FALSE(check);
 }
 
 void test_checkAreaSizeValidity_given_133_expect_false(void){
 
-	int check = checkAreaSizeValidity(133);
+	int check = checkAreaSizeValidity(133,512);
 	TEST_ASSERT_FALSE(check);
 }
 
 void test_checkAreaSizeValidity_given_700_expect_false(void){
 
-	int check = checkAreaSizeValidity(700);
+	int check = checkAreaSizeValidity(700,512);
 	TEST_ASSERT_FALSE(check);
 }
 

@@ -198,8 +198,8 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	lockI2CSecurity();
 }
 
-int checkAreaSizeValidity(int size){
-	if( (size%32) == 0 && size <= 512){
+int checkAreaSizeValidity(int size, int max){
+	if( (size%32) == 0 && size <= max){
 		return 1;
 	}
 	else{
@@ -234,7 +234,7 @@ void set2Area(uint8_t *password, uint16_t size){
 	uint8_t temp[2];
 	temp[0] = 0xf;
 	temp[1] = (size/32)-1;
-	if( checkAreaSizeValidity(size) ){
+	if( checkAreaSizeValidity(size, MAXUSERMEMORYSIZE) ){
 		unlockI2CSecurity(password);
 		I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
 		I2CWrite(NFC_SYSTEMMEMORY,ENDA2, temp, 1);
@@ -252,7 +252,7 @@ void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2){
 	temp[0] = 0xf;
 	temp[1] = (sizeA2/32)-1;
 	temp[2] = (sizeA1/32)-1;
-	if( checkAreaSizeValidity(sizeA1) && checkAreaSizeValidity(sizeA2)){
+	if( checkAreaSizeValidity(sizeA1,MAXUSERMEMORYSIZE) && checkAreaSizeValidity(sizeA2,MAXUSERMEMORYSIZE)){
 		if( (sizeA2 > sizeA1)== 1 ){
 			unlockI2CSecurity(password);
 			I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
@@ -274,7 +274,7 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 	temp[0] = sizeA3;
 	temp[1] = sizeA2;
 	temp[2] = sizeA1;
-	if( checkAreaSizeValidity(sizeA1) && checkAreaSizeValidity(sizeA2) && checkAreaSizeValidity(sizeA3)){
+	if( checkAreaSizeValidity(sizeA1,MAXUSERMEMORYSIZE) && checkAreaSizeValidity(sizeA2,MAXUSERMEMORYSIZE) && checkAreaSizeValidity(sizeA3,MAXUSERMEMORYSIZE)){
 		if( ((sizeA3 > sizeA2) == 1) && ((sizeA2 > sizeA1) == 1) ){
 			unlockI2CSecurity(password);
 			I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
@@ -288,4 +288,25 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 	else{
 		set1Area(password);
 	}
+}
+
+void validateArea(uint8_t area1, uint8_t area2, uint8_t area3){
+
+	uint8_t total;
+	total = area1 + area2 + area3;
+}
+
+void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
+
+	uint8_t areas[3];
+	areas[0] = area1;
+	areas[1] = area2;
+	areas[2] = area3;
+
+
+	switch(numberOfArea){
+
+
+	}
+
 }

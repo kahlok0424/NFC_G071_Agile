@@ -76,6 +76,7 @@ typedef enum ftm_mode{
 	}FTM_MODE;
 
 //defines for others
+#define MAXUSERMEMORYSIZE	512
 
 //functions declaration
 //void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress); //comment for development
@@ -94,7 +95,7 @@ void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
-int checkAreaSizeValidity(int size);
+int checkAreaSizeValidity(int size, int max);
 void set1Area(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
 void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);

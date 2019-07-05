@@ -247,9 +247,9 @@ void test_userAreaRWProtection_given_only_area_1_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x01};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
    userAreaRWProtection(password,AREA1_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
 }
@@ -261,11 +261,11 @@ void test_userAreaRWProtection_given_only_area_2_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x04};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,NO_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+    userAreaRWProtection(password,NO_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_3_protect(void){
@@ -277,9 +277,9 @@ void test_userAreaRWProtection_given_only_area_3_protect(void){
 
   	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA3_WRITEPROTECT,NO_WRITEPROTECT);
+    userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA3_WRITEPROTECT,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_4_protect(void){
@@ -291,9 +291,9 @@ void test_userAreaRWProtection_given_only_area_4_protect(void){
 
   	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
+    userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
@@ -305,9 +305,9 @@ void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
 
   	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+    userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
@@ -319,7 +319,7 @@ void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
 
   	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
+    userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
 }

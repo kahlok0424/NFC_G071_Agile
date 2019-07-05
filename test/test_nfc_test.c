@@ -100,13 +100,13 @@ void test_set2Area_given_128bytes_expect_write_3(void){
     uint8_t expectENDA3[1] = { 0xf };
     uint8_t expectENDA1[1] = { 0x3 };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA3,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA3,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set2Area(password, 128);
+	  set2Area(password, 128);
 }
 
 void test_set2Area_given_32bytes_expect_write_0(void){
@@ -117,13 +117,13 @@ void test_set2Area_given_32bytes_expect_write_0(void){
     uint8_t expectENDA3[1] = { 0xf };
     uint8_t expectENDA1[1] = { 0x0 };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA3,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA3,1,1);
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set2Area(password, 32);
+	  set2Area(password, 32);
 }
 
 void test_set2Area_given_12bytes_expect_restore_default(void){
@@ -133,13 +133,13 @@ void test_set2Area_given_12bytes_expect_restore_default(void){
     uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
     uint8_t expectDefault[1] = { 0xf };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set2Area(password, 12);
+	  set2Area(password, 12);
 }
 
 void test_set2Area_given_600bytes_expect_restore_default(void){
@@ -149,13 +149,13 @@ void test_set2Area_given_600bytes_expect_restore_default(void){
     uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
     uint8_t expectDefault[1] = { 0xf };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set2Area(password, 600);
+	  set2Area(password, 600);
 }
 
 void test_set3Area_given_32bytes_and_160bytes_expect_write_0_and_3(void){
@@ -167,13 +167,13 @@ void test_set3Area_given_32bytes_and_160bytes_expect_write_0_and_3(void){
     uint8_t expectENDA2[1] = { 0x4 };
     uint8_t expectENDA1[1] = { 0x0 };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA2,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectENDA3,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectENDA2,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectENDA1,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set3Area(password, 32,160);
+	  set3Area(password, 32,160);
 }
 
 void test_set3Area_given_32bytes_and_160bytes_expect_restore_default(void){
@@ -183,13 +183,13 @@ void test_set3Area_given_32bytes_and_160bytes_expect_restore_default(void){
     uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
     uint8_t expectDefault[1] = { 0xf };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set3Area(password, 128,32);
+	  set3Area(password, 128,32);
 }
 
 void test_set3Area_given_128bytes_and_128bytes_expect_restore_default(void){
@@ -199,31 +199,31 @@ void test_set3Area_given_128bytes_and_128bytes_expect_restore_default(void){
     uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
     uint8_t expectDefault[1] = { 0xf };
 
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
-	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA3, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA2, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, ENDA1, expectDefault,1,1);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-	set3Area(password, 128,32);
+	  set3Area(password, 128,32);
 }
 
 void test_validateArea_given_1_5_10_expect_true(void){
 
-  int check = validateArea(4,1,5,10);
-  TEST_ASSERT_TRUE(check);
+    int check = validateArea(4,1,5,10);
+    TEST_ASSERT_TRUE(check);
 }
 
 void test_validateArea_given_1_10_10_expect_false(void){
 
-  int check = validateArea(4,1,10,10);
-  TEST_ASSERT_FALSE(check);
+    int check = validateArea(4,1,10,10);
+    TEST_ASSERT_FALSE(check);
 }
 
 void test_validateArea_given_6_area_false(void){
 
-  int check = validateArea(6,1,10,10);
-  TEST_ASSERT_FALSE(check);
+    int check = validateArea(6,1,10,10);
+    TEST_ASSERT_FALSE(check);
 }
 
 void test_userAreaRWProtection_given_no_protection(void){
@@ -235,9 +235,9 @@ void test_userAreaRWProtection_given_no_protection(void){
 
   	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
-	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+	  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+    userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_1_protect(void){
@@ -251,7 +251,7 @@ void test_userAreaRWProtection_given_only_area_1_protect(void){
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-   userAreaRWProtection(password,AREA1_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+    userAreaRWProtection(password,AREA1_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_2_protect(void){
@@ -275,7 +275,7 @@ void test_userAreaRWProtection_given_only_area_3_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x10};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
@@ -289,7 +289,7 @@ void test_userAreaRWProtection_given_only_area_4_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x40};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
@@ -303,7 +303,7 @@ void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x05};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
@@ -317,7 +317,7 @@ void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x45};
 
-  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 

@@ -16,3 +16,6 @@ nfc.c:214:6:set1Area	32	static
 nfc.c:232:6:set2Area	32	static
 nfc.c:249:6:set3Area	32	static
 nfc.c:271:6:set4Area	40	static
+nfc.c:293:5:validateArea	32	static
+nfc.c:310:6:setArea	32	static
+nfc.c:328:6:userAreaRWProtection	32	static

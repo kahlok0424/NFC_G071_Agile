@@ -23,7 +23,6 @@ void test_NFC_test_unlockI2CSecurity_given_correct_password(void)
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, correct,17,17);
 
     unlockI2CSecurity(password);
-    //TEST_ASSERT_EQUAL_UINT8_ARRAY( correct,result,17);
 }
 
 void test_NFC_test_unlockI2CSecurity_given_wrong_password_expect_fail(void)
@@ -35,7 +34,6 @@ void test_NFC_test_unlockI2CSecurity_given_wrong_password_expect_fail(void)
     I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, correct,17,17);
 
     unlockI2CSecurity(password);
-    //TEST_ASSERT_EQUAL_UINT8_ARRAY( correct,result,17);
 }
 
 void test_NFC_test_lockI2CSecurity_expect_correct(void)
@@ -208,4 +206,120 @@ void test_set3Area_given_128bytes_and_128bytes_expect_restore_default(void){
 	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
 	set3Area(password, 128,32);
+}
+
+void test_validateArea_given_1_5_10_expect_true(void){
+
+  int check = validateArea(4,1,5,10);
+  TEST_ASSERT_TRUE(check);
+}
+
+void test_validateArea_given_1_10_10_expect_false(void){
+
+  int check = validateArea(4,1,10,10);
+  TEST_ASSERT_FALSE(check);
+}
+
+void test_validateArea_given_6_area_false(void){
+
+  int check = validateArea(6,1,10,10);
+  TEST_ASSERT_FALSE(check);
+}
+
+void test_userAreaRWProtection_given_no_protection(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x0};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_only_area_1_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x01};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,AREA1_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_only_area_2_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x04};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,NO_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_only_area_3_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x10};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA3_WRITEPROTECT,NO_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_only_area_4_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x40};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x05};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+}
+
+void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[1] = {0x45};
+
+  	I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
+	 I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+   userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
 }

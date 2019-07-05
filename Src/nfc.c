@@ -290,10 +290,21 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 	}
 }
 
-void validateArea(uint8_t area1, uint8_t area2, uint8_t area3){
+int validateArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
 
 	uint8_t total;
 	total = area1 + area2 + area3;
+
+	if( numberOfArea > 0 || numberOfArea <= 4){
+		if(total > 16){
+			return 0;
+		}else{
+			return 1;
+		}
+	}
+	else{
+		return 0;
+	}
 }
 
 void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
@@ -303,10 +314,22 @@ void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
 	areas[1] = area2;
 	areas[2] = area3;
 
+	int check = validateArea(numberOfArea, area1,area2,area3);
 
-	switch(numberOfArea){
+	if(check){
+		switch(numberOfArea){
 
+		case 1: area2 = area1;
 
+		}
 	}
+}
 
+void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4){
+
+	uint8_t temp[1];
+	temp[0] = (area1 | area2 | area3 | area4 );
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,I2CSS, temp, 1);
+	lockI2CSecurity();
 }

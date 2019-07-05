@@ -113,20 +113,23 @@ int main(void)
   buffer1[3]= 0x4c;	//L
   buffer1[4]= 0x4f;	//O
   buffer1[5]= 0x33;	//3
-  uint8_t empty[10];
-  empty[0] = 0x0;
-  empty[1] = 0x0;
-  empty[2] = 0x0;
-  empty[3] = 0x0;
-  empty[4] = 0x0;
-  empty[5] = 0x0;
-  empty[6] = 0x0;
-  empty[7] = 0x0;
-  empty[8] = 0x0;
-  empty[9] = 0x0;
+  uint8_t buffer2[13];
+  buffer2[0] = 0x50; //P
+  buffer2[1] = 0x61; //a
+  buffer2[2] = 0x63; //c
+  buffer2[3] = 0x69; //i
+  buffer2[4] = 0x66; //f
+  buffer2[5] = 0x69; //i
+  buffer2[6] = 0x63; //c
+  buffer2[7] = 0x20; //
+  buffer2[8] = 0x6f; //o
+  buffer2[9] = 0x63; //c
+  buffer2[10] = 0x65; //e
+  buffer2[11] = 0x61; //a
+  buffer2[12] = 0x6e; //n
   //uint8_t oldPassword[8] = {0x07,0x07,0x07,0x07,0x08,0x08,0x08,0x08};
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
-  uint8_t received[11];
+  uint8_t received[13];
   uint8_t test1[8];
   uint8_t test2[4];
   uint8_t ENDA[3];
@@ -135,20 +138,24 @@ int main(void)
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   NFC04A1_setRFMode(password,RF_ENABLE);
-  configFTM(password, FTM_DISABLE, 0x00);
-  set1Area(password);
+  configFTM(password, FTM_ENABLE, 0x7);
+  writeSystemMemory(I2CSS,password, 0x00);
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   readSystemMemory(MB_WDG,test2,1);
   readSystemMemory(MB_MODE,test2+1,1);
+  I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
+  I2CRead(NFC_USERMEMORY, MB_LEN_Dyn,test2,1);
+  I2CRead(NFC_USERMEMORY, MB_CTRL_Dyn,test2+1,1);
+  I2CRead(NFC_USERMEMORY,0x2008,received,13);
   //NFC04A1_setRFModeDyn(RF_ENABLE);
   //changeI2CPassword(oldPassword,password);
   //readI2CPassword(password,received);
-  writeSystemMemory(I2CSS,password, 0x00);
+  userAreaRWProtection(password, AREA1_WRITEPROTECT, AREA2_WRITEPROTECT, AREA3_WRITEPROTECT, AREA4_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
-  set2Area(password, 64);
-  I2CWrite(NFC_USERMEMORY,62,buffer1,2);
-  I2CWrite(NFC_USERMEMORY,0x80,buffer1,4);
-  I2CRead(NFC_USERMEMORY,0x7E, test1, 6);
+  //set2Area(password, 64);
+  //I2CWrite(NFC_USERMEMORY,62,buffer1,2);
+  //I2CWrite(NFC_USERMEMORY,0x80,buffer1,4);
+  //I2CRead(NFC_USERMEMORY,0x7E, test1, 6);
   readUserMemory(1,0x80,test1,3);
   lockI2CSecurity();
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);

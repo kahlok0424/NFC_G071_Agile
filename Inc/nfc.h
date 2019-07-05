@@ -54,9 +54,13 @@
 #define I2C_PWD			0x0900
 
 //NFC device dynamic registers address
+#define GPO_CTRL_Dyn	0x2000
+#define EH_CTRL_Dyn		0x2002
 #define RF_MNGT_DYN		0x2003
 #define I2C_SSO_DYN		0x2004    //i2c security session status
 #define IT_STS_DYN		0x2005
+#define MB_CTRL_Dyn		0x2006
+#define MB_LEN_Dyn		0x2007
 
 //defines for command
 #define PRESENTPASS		0x09
@@ -74,6 +78,14 @@ typedef enum ftm_mode{
 	 FTM_DISABLE 	= 0x00,
 	 FTM_ENABLE		= 0x01,
 	}FTM_MODE;
+
+typedef enum writeProtect{
+	 NO_WRITEPROTECT		= 0x00,
+	 AREA1_WRITEPROTECT 	= 0x01,
+	 AREA2_WRITEPROTECT		= 0x04,
+	 AREA3_WRITEPROTECT		= 0x10,
+	 AREA4_WRITEPROTECT		= 0x40,
+	}WRITEPROTECT;
 
 //defines for others
 #define MAXUSERMEMORYSIZE	512
@@ -100,5 +112,8 @@ void set1Area(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
 void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);
 void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3);
+int validateArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3);
+void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3);
+void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
 
 #endif /* NFC_H_ */

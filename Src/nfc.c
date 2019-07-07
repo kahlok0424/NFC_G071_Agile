@@ -208,14 +208,13 @@ int checkAreaSizeValidity(int size, int max){
 }
 
 /**
- * @brief configure the user memory into 1 area and the area cover all user memory
+ * @brief configure the user memory into 1 area and the area cover all user memory (default setting)
  * @param password to unlock I2C security
  */
-void set1Area(uint8_t *password){
+void setDefaultArea(uint8_t *password){
 
-	uint8_t temp[2];
-	temp[0] = 0x0f;
-	//temp[1] = (size/32)-1;
+	uint8_t temp[1];
+	temp[0] = 0xf;
 
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, temp, 1);
@@ -242,7 +241,7 @@ void set2Area(uint8_t *password, uint16_t size){
 		lockI2CSecurity();
 	}
 	else{
-		set1Area(password);
+		setDefaultArea(password);
 	}
 }
 
@@ -260,11 +259,11 @@ void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2){
 			I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
 			lockI2CSecurity();
 		}else{
-			set1Area(password);
+			setDefaultArea(password);
 		}
 	}
 	else{
-		set1Area(password);
+		setDefaultArea(password);
 	}
 }
 
@@ -282,47 +281,72 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 			I2CWrite(NFC_SYSTEMMEMORY,ENDA1, temp+2, 1);
 			lockI2CSecurity();
 		}else{
-			set1Area(password);
+			setDefaultArea(password);
 		}
 	}
 	else{
-		set1Area(password);
+		setDefaultArea(password);
 	}
 }
 
-int validateArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
+int validateArea(uint8_t area1, uint8_t area2, uint8_t area3){
 
 	uint8_t total;
 	total = area1 + area2 + area3;
 
-	if( numberOfArea > 0 || numberOfArea <= 4){
 		if(total > 16){
 			return 0;
 		}else{
 			return 1;
 		}
-	}
-	else{
-		return 0;
-	}
 }
 
-void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3){
+/**
+ * @brief Allocate the user area into number of areas ( 1~4) and with different size each area.
+ * @brief Each area must contain at least 1 block (1 block = 32 bytes) so the number of block cannot be 0.
+ * @brief Example to specify 2 areas with first area 5 blocks and second area 3 blocks. #setArea(5,3,NA,NA);
+ * @brief Specify "NA" in the parameter to indicate no area is allocated or needed.
+ * @brief Total number of block in all areas has to be 16 and the last area cannot be specify, it will be allocated with the remaining user memory by default.
+ * @param size of area 1, area 2 and area 3 in integer, size of area 4 is the remaining user memory
+ */
+void setArea(uint8_t *password, int area1, int area2, int area3){
 
 	uint8_t areas[3];
-	areas[0] = area1;
-	areas[1] = area2;
-	areas[2] = area3;
 
-	int check = validateArea(numberOfArea, area1,area2,area3);
+	if(area1 != 0 && area2 != 0 && area3 != 0){
 
-	if(check){
-		switch(numberOfArea){
-
-		case 1: area2 = area1;
-
+		if (area1 == NA){
+			areas[0] = 0xf;
+			areas[1] = 0xf;
+			areas[2] = 0xf;
+		}else if( area2 == NA && validateArea(area1,0,0) ){
+			areas[0] = (area1)-1;
+			areas[1] = 0xf;
+			areas[2] = 0xf;
+		}else if(area3 == NA && validateArea(area1, area2,0) ){
+			areas[0] = (area1)-1;
+			areas[1] = (area2+area1)-1;
+			areas[2] = 0xf;
+		}else if(area1 != NA && area2 != NA && area3 != NA && validateArea(area1,area2,area3)){
+			areas[0] = (area1)-1;
+			areas[1] = (area2+area1)-1;
+			areas[2] = (area3+area2+area1)-1;
+		}else{
+			areas[0] = 0xf;
+			areas[1] = 0xf;
+			areas[2] = 0xf;
 		}
+	}else{
+		areas[0] = 0xf;
+		areas[1] = 0xf;
+		areas[2] = 0xf;
 	}
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, areas+2, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA2, areas+1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA1, areas, 1);
+	lockI2CSecurity();
 }
 
 void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4){

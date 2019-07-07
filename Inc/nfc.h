@@ -89,6 +89,7 @@ typedef enum writeProtect{
 
 //defines for others
 #define MAXUSERMEMORYSIZE	512
+#define NA					-1		//Not available
 
 //functions declaration
 //void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress); //comment for development
@@ -108,12 +109,12 @@ void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 int checkAreaSizeValidity(int size, int max);
-void set1Area(uint8_t *password);
+void setDefaultArea(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
 void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);
 void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3);
-int validateArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3);
-void setArea(uint8_t numberOfArea, uint8_t area1, uint8_t area2, uint8_t area3);
+int validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
+void setArea(uint8_t *password, int area1, int area2, int area3);
 void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
 
 #endif /* NFC_H_ */

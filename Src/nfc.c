@@ -185,6 +185,26 @@ void NFC04A1_setRFModeDyn(RF_MODE mode){
 	writeDynamicReg(RF_MNGT_DYN, mode);
 }
 
+void enableFTM(uint8_t *password){
+
+	uint8_t temp1[1];
+	temp1[0] = 0x1;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
+	lockI2CSecurity();
+}
+
+void disableFTM(uint8_t *password){
+
+	uint8_t temp1[1];
+	temp1[0] = 0x0;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
+	lockI2CSecurity();
+}
+
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 
 	uint8_t temp1[1];
@@ -193,8 +213,8 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	temp2[0] = wdgTime;
 
 	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG,temp2, 1);
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_Dyn, temp1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp2, 1);
 	lockI2CSecurity();
 }
 

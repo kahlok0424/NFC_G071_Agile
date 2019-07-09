@@ -6,7 +6,7 @@
  */
 
 //#include "nfc.h"
-//#include "main.h"
+#include "main.h"
 #include "i2c.h"
 //#include "stm32g0xx_hal.h"
 

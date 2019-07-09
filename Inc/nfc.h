@@ -8,7 +8,7 @@
 #ifndef NFC_H_
 #define NFC_H_
 
-//#include "main.h"
+#include "main.h"
 #include "stdint.h"
 //#include "stm32g0xx_hal_def.h"
 
@@ -107,13 +107,15 @@ void readUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
+void enableFTM(uint8_t *password);
+void disableFTM(uint8_t *password);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
-int checkAreaSizeValidity(int size, int max);
+int  checkAreaSizeValidity(int size, int max);
 void setDefaultArea(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
 void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);
 void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3);
-int validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
+int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
 void setArea(uint8_t *password, int area1, int area2, int area3);
 void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
 

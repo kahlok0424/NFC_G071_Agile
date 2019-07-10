@@ -387,5 +387,17 @@ void waitRFReadMessage(){
 		readDynamicReg(MB_CTRL_DYN,temp);
 		HAL_Delay(100);
 	}
-	I2CRead(NFC_USERMEMORY, MB_LEN_DYN,temp+1,1);
+	readDynamicReg(MB_LEN_DYN,temp+1);
+}
+
+void waitRFWriteMessage(){
+
+	uint8_t temp[2];
+	temp[0] = 0x4;
+
+	while( (temp[0] & 0x04) ){
+		readDynamicReg(MB_CTRL_DYN,temp);
+		HAL_Delay(100);
+	}
+	readDynamicReg(MB_LEN_DYN,temp+1);
 }

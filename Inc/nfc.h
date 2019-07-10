@@ -54,13 +54,13 @@
 #define I2C_PWD			0x0900
 
 //NFC device dynamic registers address
-#define GPO_CTRL_Dyn	0x2000
-#define EH_CTRL_Dyn		0x2002
+#define GPO_CTRL_DYN	0x2000
+#define EH_CTRL_DYN		0x2002
 #define RF_MNGT_DYN		0x2003
 #define I2C_SSO_DYN		0x2004    //i2c security session status
 #define IT_STS_DYN		0x2005
-#define MB_CTRL_Dyn		0x2006
-#define MB_LEN_Dyn		0x2007
+#define MB_CTRL_DYN		0x2006
+#define MB_LEN_DYN		0x2007
 
 //defines for command
 #define PRESENTPASS		0x09
@@ -107,9 +107,6 @@ void readUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
-void enableFTM(uint8_t *password);
-void disableFTM(uint8_t *password);
-void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 int  checkAreaSizeValidity(int size, int max);
 void setDefaultArea(uint8_t *password);
 void set2Area(uint8_t *password, uint16_t size);
@@ -118,5 +115,9 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
 void setArea(uint8_t *password, int area1, int area2, int area3);
 void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
+void enableFTM(uint8_t *password);
+void disableFTM(uint8_t *password);
+void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
+void waitRFReadMessage();
 
 #endif /* NFC_H_ */

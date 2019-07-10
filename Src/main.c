@@ -129,7 +129,7 @@ int main(void)
   buffer2[12] = 0x6e; //n
   //uint8_t oldPassword[8] = {0x07,0x07,0x07,0x07,0x08,0x08,0x08,0x08};
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
-  uint8_t received[256];
+  uint8_t received[20];
   uint8_t test1[8];
   uint8_t test2[4];
   uint8_t ENDA[3];
@@ -143,10 +143,10 @@ int main(void)
   HAL_Delay(50);
   writeSystemMemory(I2CSS,password, 0x00);
   I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
-  I2CRead(NFC_USERMEMORY, MB_LEN_Dyn,test2,1);
-  I2CRead(NFC_USERMEMORY,0x2008,received,256);
+  I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);
+  I2CRead(NFC_USERMEMORY,0x2008,received,20);
   //readI2CPassword(password,received);
-  userAreaRWProtection(password, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT);
+  /*userAreaRWProtection(password, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
   setArea(password, 2,NA,NA);
   I2CWrite(NFC_USERMEMORY,62,buffer,5);
@@ -159,7 +159,7 @@ int main(void)
   readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
   writeUserMemory(1, 0x66, buffer, 6);
   readSystemMemory(I2CSS, data,1);
-  readUserMemory(1, 0x66, test1, 6);
+  readUserMemory(1, 0x66, test1, 6);*/
 
   /* USER CODE END 2 */
 
@@ -170,7 +170,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+	  waitRFReadMessage();
   }
   /* USER CODE END 3 */
 }

@@ -185,39 +185,6 @@ void NFC04A1_setRFModeDyn(RF_MODE mode){
 	writeDynamicReg(RF_MNGT_DYN, mode);
 }
 
-void enableFTM(uint8_t *password){
-
-	uint8_t temp1[1];
-	temp1[0] = 0x1;
-
-	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
-	lockI2CSecurity();
-}
-
-void disableFTM(uint8_t *password){
-
-	uint8_t temp1[1];
-	temp1[0] = 0x0;
-
-	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
-	lockI2CSecurity();
-}
-
-void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
-
-	uint8_t temp1[1];
-	temp1[0] = mode;
-	uint8_t temp2[1];
-	temp2[0] = wdgTime;
-
-	unlockI2CSecurity(password);
-	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_Dyn, temp1, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp2, 1);
-	lockI2CSecurity();
-}
-
 int checkAreaSizeValidity(int size, int max){
 	if( (size%32) == 0 && size <= max){
 		return 1;
@@ -376,4 +343,49 @@ void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT ar
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,I2CSS, temp, 1);
 	lockI2CSecurity();
+}
+
+void enableFTM(uint8_t *password){
+
+	uint8_t temp1[1];
+	temp1[0] = 0x1;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
+	lockI2CSecurity();
+}
+
+void disableFTM(uint8_t *password){
+
+	uint8_t temp1[1];
+	temp1[0] = 0x0;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
+	lockI2CSecurity();
+}
+
+void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
+
+	uint8_t temp1[1];
+	temp1[0] = mode;
+	uint8_t temp2[1];
+	temp2[0] = wdgTime;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp2, 1);
+	lockI2CSecurity();
+}
+
+void waitRFReadMessage(){
+
+	uint8_t temp[2];
+	temp[0] = 0x2;
+
+	while( (temp[0] & 0x02) ){
+		readDynamicReg(MB_CTRL_DYN,temp);
+		HAL_Delay(100);
+	}
+	I2CRead(NFC_USERMEMORY, MB_LEN_DYN,temp+1,1);
 }

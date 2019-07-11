@@ -128,9 +128,10 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
 void setArea(uint8_t *password, int area1, int area2, int area3);
 void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
-void enableFTM(uint8_t *password);
-void disableFTM(uint8_t *password);
-void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
+void enableMailBox(uint8_t *password);
+void disableMailBox(uint8_t *password);
+void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime);
+void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 void waitRFReadMessage();
 void waitRFWriteMessage();
 void getMailBoxMessage(uint8_t *data);

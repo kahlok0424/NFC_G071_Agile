@@ -462,7 +462,7 @@ void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
   userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
 }
 
-void test_enableFTM_expect_pass(void)
+void test_enableMailbox_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -473,10 +473,10 @@ void test_enableFTM_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  enableFTM(password);
+  enableMailBox(password);
 }
 
-void test_disableFTM_expect_pass(void)
+void test_disableMailbox_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -487,7 +487,7 @@ void test_disableFTM_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  disableFTM(password);
+  disableMailBox(password);
 }
 
 void test_enableGPO_expect_pass(void)

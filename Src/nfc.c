@@ -337,27 +337,36 @@ void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT ar
 	lockI2CSecurity();
 }
 
-void enableFTM(uint8_t *password){
+void enableMailBox(uint8_t *password){
 
-	uint8_t temp1[1];
-	temp1[0] = 0x1;
-
-	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
-	lockI2CSecurity();
-}
-
-void disableFTM(uint8_t *password){
-
-	uint8_t temp1[1];
-	temp1[0] = 0x0;
+	uint8_t temp[1];
+	temp[0] = 0x1;
 
 	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp, 1);
 	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp, 1);
 }
 
-void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
+void disableMailBox(uint8_t *password){
+
+	uint8_t temp[1];
+	temp[0] = 0x0;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,MB_MODE, temp, 1);
+	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp, 1);
+}
+
+void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime){
+
+	uint8_t temp[1];
+	temp[0] = wdgTime;
+	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp, 1);
+}
+
+void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 
 	uint8_t temp1[1];
 	temp1[0] = mode;
@@ -365,8 +374,13 @@ void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 	temp2[0] = wdgTime;
 
 	unlockI2CSecurity(password);
-	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp1, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp2, 1);
+	if(mode == FTM_ENABLE){
+		enableMailBox(password);
+	}
+	else if(mode == FTM_DISABLE){
+		disableMailBox(password);
+	}
+	setMailBoxTimeout(password, wdgTime);
 	lockI2CSecurity();
 }
 

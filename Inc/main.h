@@ -64,6 +64,9 @@ void Error_Handler(void);
 #define LPUART1_TX_GPIO_Port GPIOA
 #define LPUART1_RX_Pin GPIO_PIN_3
 #define LPUART1_RX_GPIO_Port GPIOA
+#define RF_IT_Pin GPIO_PIN_6
+#define RF_IT_GPIO_Port GPIOA
+#define RF_IT_EXTI_IRQn EXTI4_15_IRQn
 #define NFC_LED3_Pin GPIO_PIN_10
 #define NFC_LED3_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13

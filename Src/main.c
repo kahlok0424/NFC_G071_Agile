@@ -44,7 +44,7 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-//extern I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c1;
 
 UART_HandleTypeDef hlpuart1;
 
@@ -57,6 +57,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_LPUART1_UART_Init(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -97,6 +98,9 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_LPUART1_UART_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 
   uint8_t buffer[6];
@@ -129,7 +133,7 @@ int main(void)
   buffer2[12] = 0x6e; //n
   //uint8_t oldPassword[8] = {0x07,0x07,0x07,0x07,0x08,0x08,0x08,0x08};
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
-  uint8_t received[20];
+  uint8_t received[256];
   uint8_t test1[8];
   uint8_t test2[4];
   uint8_t ENDA[3];
@@ -137,14 +141,20 @@ int main(void)
   uint8_t data[1];
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
+  HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   NFC04A1_setRFMode(password,RF_ENABLE);
   enableFTM(password);
   configFTM(password, FTM_ENABLE, 0x00);
   HAL_Delay(50);
+  enableGPO(password);
+  configGPO(password,RF_PUT_MSG_EN,GPO_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
   writeSystemMemory(I2CSS,password, 0x00);
-  I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
+  //I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
   I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);
-  I2CRead(NFC_USERMEMORY,0x2008,received,20);
+  //getMailBoxMessage(received);
+  //I2CRead(NFC_USERMEMORY,0x2008,received,86);
+ // I2CRead(NFC_USERMEMORY,0x205e,received,85);
+ // I2CRead(NFC_USERMEMORY,0x20b3,received,85);
   //readI2CPassword(password,received);
   /*userAreaRWProtection(password, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
@@ -170,7 +180,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  waitRFReadMessage();
+	  //waitRFReadMessage();
   }
   /* USER CODE END 3 */
 }
@@ -218,6 +228,17 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI4_15_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI4_15_IRQn, 1, 0);
+  HAL_NVIC_EnableIRQ(EXTI4_15_IRQn);
 }
 
 /**
@@ -334,6 +355,12 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, NFC_LED1_Pin|NFC_LED2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : RF_IT_Pin */
+  GPIO_InitStruct.Pin = RF_IT_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(RF_IT_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : NFC_LED3_Pin */
   GPIO_InitStruct.Pin = NFC_LED3_Pin;

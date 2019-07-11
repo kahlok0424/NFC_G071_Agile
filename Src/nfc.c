@@ -150,14 +150,10 @@ void writeDynamicReg(uint16_t regAddress, uint8_t data){
  * @param pointer to data to write
  * @param number of bytes to write
  */
-void writeUserMemory(int area, uint16_t address, uint8_t *data, int n){
+void writeUserMemory(uint16_t address, uint8_t *data, int n){
 
-	if(area == 1){
 		I2CWrite(NFC_USERMEMORY, address, data, n);
-	}
-	else{
 		//waiting to implement
-	}
 }
 
 /**
@@ -167,14 +163,10 @@ void writeUserMemory(int area, uint16_t address, uint8_t *data, int n){
  * @param pointer to data to read
  * @param number of bytes to read
  */
-void readUserMemory(int area, uint16_t address, uint8_t *data, int n){
+void readUserMemory(uint16_t address, uint8_t *data, int n){
 
-	if(area == 1){
 		I2CRead(NFC_USERMEMORY, address, data, n);
-	}
-	else{
 		//waiting to implement
-	}
 }
 
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode){
@@ -385,7 +377,7 @@ void waitRFReadMessage(){
 
 	while( (temp[0] & 0x02) ){
 		readDynamicReg(MB_CTRL_DYN,temp);
-		HAL_Delay(100);
+		//HAL_Delay(100);
 	}
 	readDynamicReg(MB_LEN_DYN,temp+1);
 }
@@ -397,7 +389,49 @@ void waitRFWriteMessage(){
 
 	while( (temp[0] & 0x04) ){
 		readDynamicReg(MB_CTRL_DYN,temp);
-		HAL_Delay(100);
+		//HAL_Delay(100);
 	}
 	readDynamicReg(MB_LEN_DYN,temp+1);
 }
+
+void getMailBoxMessage(uint8_t *data){
+
+	uint8_t temp[1];
+
+	readDynamicReg(MB_LEN_DYN,temp);
+	readUserMemory(NFC_MAILBOX,data,temp[0]);
+}
+
+void enableGPO(uint8_t *password){
+
+	uint8_t temp[1];
+	temp[0] = GPO_EN;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
+	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,GPO_CTRL_DYN, temp, 1);
+}
+
+void disableGPO(uint8_t *password){
+
+	uint8_t temp[1];
+	temp[0] = GPO_DISABLE;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
+	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,GPO_CTRL_DYN, temp, 1);
+}
+
+void configGPO(uint8_t *password, GPO_MODE mode1, GPO_MODE mode2, GPO_MODE mode3, GPO_MODE mode4, GPO_MODE mode5, GPO_MODE mode6, GPO_MODE mode7){
+
+	uint8_t temp[1];
+	temp[0] = 0;
+	temp[0] = mode1 | mode2 | mode3 | mode4 | mode5 | mode6 |mode7;
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
+	lockI2CSecurity();
+}
+

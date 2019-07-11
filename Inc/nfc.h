@@ -8,7 +8,7 @@
 #ifndef NFC_H_
 #define NFC_H_
 
-#include "main.h"
+//#include "main.h"
 #include "stdint.h"
 //#include "stm32g0xx_hal_def.h"
 
@@ -24,6 +24,7 @@
 #define NFC_USERMEMORY		0xA6
 #define NFC_SYSTEMMEMORY	0xAE
 #define NFC_DYNAMICMEMORY	0xA6
+#define NFC_MAILBOX			0x2008
 
 //NFC device static register address
 #define GPO				0x0000
@@ -71,13 +72,25 @@ typedef enum rf_mode{
 	 RF_ENABLE 	= 0x00,
 	 RF_DISABLE = 0x01,
 	 RF_SLEEP	= 0x03,
-	}RF_MODE;
+}RF_MODE;
 
 //Fast transfer mode typedef
 typedef enum ftm_mode{
 	 FTM_DISABLE 	= 0x00,
 	 FTM_ENABLE		= 0x01,
-	}FTM_MODE;
+}FTM_MODE;
+
+typedef enum gpo_mode{
+	 RF_USER_EN 		= 0x01,
+	 RF_ACTIVITY_EN 	= 0x02,
+	 RF_INTERRUPT_EN 	= 0x04,
+	 FIELD_CHANGE_EN 	= 0x08,
+	 RF_PUT_MSG_EN 		= 0x10,
+	 RF_GET_MSG_EN	 	= 0x20,
+	 RF_WRITE_EN 		= 0x40,
+	 GPO_EN 			= 0x80,
+	 GPO_DISABLE		= 0x00,
+}GPO_MODE;
 
 typedef enum writeProtect{
 	 NO_WRITEPROTECT		= 0x00,
@@ -85,7 +98,7 @@ typedef enum writeProtect{
 	 AREA2_WRITEPROTECT		= 0x04,
 	 AREA3_WRITEPROTECT		= 0x10,
 	 AREA4_WRITEPROTECT		= 0x40,
-	}WRITEPROTECT;
+}WRITEPROTECT;
 
 //defines for others
 #define MAXUSERMEMORYSIZE	512
@@ -103,8 +116,8 @@ void readSystemMemory(uint16_t regAddress, uint8_t *buffer,int n);
 void writeSystemMemory(uint16_t regAddress,uint8_t *password, uint8_t data);
 void readDynamicReg(uint16_t regAddress, uint8_t *buffer);
 void writeDynamicReg(uint16_t regAddress, uint8_t data);
-void readUserMemory(int area, uint16_t address, uint8_t *data, int n);
-void writeUserMemory(int area, uint16_t address, uint8_t *data, int n);
+void readUserMemory(uint16_t address, uint8_t *data, int n);
+void writeUserMemory(uint16_t address, uint8_t *data, int n);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 int  checkAreaSizeValidity(int size, int max);
@@ -119,5 +132,9 @@ void enableFTM(uint8_t *password);
 void disableFTM(uint8_t *password);
 void configFTM(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 void waitRFReadMessage();
-
+void waitRFWriteMessage();
+void getMailBoxMessage(uint8_t *data);
+void enableGPO(uint8_t *password);
+void disableGPO(uint8_t *password);
+void configGPO(uint8_t *password, GPO_MODE mode1, GPO_MODE mode2, GPO_MODE mode3, GPO_MODE mode4, GPO_MODE mode5, GPO_MODE mode6, GPO_MODE mode7);
 #endif /* NFC_H_ */

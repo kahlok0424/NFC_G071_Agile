@@ -416,7 +416,7 @@ void getMailBoxMessage(uint8_t *data){
 	readUserMemory(NFC_MAILBOX,data,temp[0]);
 }
 
-void enableGPO(uint8_t *password){
+void enableInterrupt(uint8_t *password){
 
 	uint8_t temp[1];
 	temp[0] = GPO_EN;
@@ -427,7 +427,7 @@ void enableGPO(uint8_t *password){
 	I2CWrite(NFC_DYNAMICMEMORY,GPO_CTRL_DYN, temp, 1);
 }
 
-void disableGPO(uint8_t *password){
+void disableInterrupt(uint8_t *password){
 
 	uint8_t temp[1];
 	temp[0] = GPO_DISABLE;
@@ -438,12 +438,13 @@ void disableGPO(uint8_t *password){
 	I2CWrite(NFC_DYNAMICMEMORY,GPO_CTRL_DYN, temp, 1);
 }
 
-void configGPO(uint8_t *password, GPO_MODE mode1, GPO_MODE mode2, GPO_MODE mode3, GPO_MODE mode4, GPO_MODE mode5, GPO_MODE mode6, GPO_MODE mode7){
+void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE mode2, INTERRUPT_MODE mode3, INTERRUPT_MODE mode4, INTERRUPT_MODE mode5, INTERRUPT_MODE mode6, INTERRUPT_MODE mode7){
 
 	uint8_t temp[1];
 	temp[0] = 0;
-	temp[0] = mode1 | mode2 | mode3 | mode4 | mode5 | mode6 |mode7;
 
+	I2CRead(NFC_SYSTEMMEMORY,GPO, temp, 1);
+	temp[0] = mode1 | mode2 | mode3 | mode4 | mode5 | mode6 | mode7 | temp[0];
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
 	lockI2CSecurity();

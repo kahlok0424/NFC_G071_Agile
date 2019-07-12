@@ -80,14 +80,19 @@ typedef enum ftm_mode{
 	 FTM_ENABLE		= 0x01,
 }FTM_MODE;
 
+typedef enum interrupt_mode{
+	 RF_USER_EN 			= 0x01,
+	 RF_ACTIVITY_EN 		= 0x02,
+	 RF_INTERRUPT_EN 		= 0x04,
+	 FIELD_CHANGE_EN 		= 0x08,
+	 RF_PUT_MSG_EN 			= 0x10,
+	 RF_GET_MSG_EN	 		= 0x20,
+	 RF_WRITE_EN 			= 0x40,
+	 INTERRUPT_EN 			= 0x80,
+	 NOT_USED				= 0x00,
+}INTERRUPT_MODE;
+
 typedef enum gpo_mode{
-	 RF_USER_EN 		= 0x01,
-	 RF_ACTIVITY_EN 	= 0x02,
-	 RF_INTERRUPT_EN 	= 0x04,
-	 FIELD_CHANGE_EN 	= 0x08,
-	 RF_PUT_MSG_EN 		= 0x10,
-	 RF_GET_MSG_EN	 	= 0x20,
-	 RF_WRITE_EN 		= 0x40,
 	 GPO_EN 			= 0x80,
 	 GPO_DISABLE		= 0x00,
 }GPO_MODE;
@@ -135,7 +140,7 @@ void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 void waitRFReadMessage();
 void waitRFWriteMessage();
 void getMailBoxMessage(uint8_t *data);
-void enableGPO(uint8_t *password);
-void disableGPO(uint8_t *password);
-void configGPO(uint8_t *password, GPO_MODE mode1, GPO_MODE mode2, GPO_MODE mode3, GPO_MODE mode4, GPO_MODE mode5, GPO_MODE mode6, GPO_MODE mode7);
+void enableInterrupt(uint8_t *password);
+void disableInterrupt(uint8_t *password);
+void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE mode2, INTERRUPT_MODE mode3, INTERRUPT_MODE mode4, INTERRUPT_MODE mode5, INTERRUPT_MODE mode6, INTERRUPT_MODE mode7);
 #endif /* NFC_H_ */

@@ -472,6 +472,7 @@ void test_enableMailbox_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expect,1, 1);
 
   enableMailBox(password);
 }
@@ -486,6 +487,7 @@ void test_disableMailbox_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expect,1, 1);
 
   disableMailBox(password);
 }
@@ -502,7 +504,7 @@ void test_enableGPO_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
   I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY, GPO_CTRL_DYN, expect,1,1);
 
-  enableGPO(password);
+  enableInterrupt(password);
 }
 
 void test_disableGPO_expect_pass(void)
@@ -517,61 +519,69 @@ void test_disableGPO_expect_pass(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
   I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY, GPO_CTRL_DYN, expect,1,1);
 
-  disableGPO(password);
+  disableInterrupt(password);
 }
 
-void test_configGPO_given_RF_USER_EN_and_RF_ACTIVITY_EN_expect_correct(void)
+void test_configureInterrupt_given_RF_USER_EN_and_RF_ACTIVITY_EN_expect_correct(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
-  uint8_t expect[1] = {0x3};
+  uint8_t expect[1] = {0x03};
+  uint8_t expectZero[1] = {0x0};
 
+  I2CRead_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expectZero,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configGPO(password,RF_USER_EN,RF_ACTIVITY_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
+  configureInterrupt(password,RF_USER_EN,RF_ACTIVITY_EN,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
 }
 
-void test_configGPO_given_RF_INTERRUPT_EN_and_RF_PUT_MSG_EN_and_FIELD_CHANGE_expect_correct(void)
+void test_configureInterrupt_given_RF_INTERRUPT_EN_and_RF_PUT_MSG_EN_and_FIELD_CHANGE_expect_correct(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x1c};
+  uint8_t expectZero[1] = {0x0};
 
+  I2CRead_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expectZero,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configGPO(password,RF_INTERRUPT_EN,RF_PUT_MSG_EN,FIELD_CHANGE_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
+  configureInterrupt(password,RF_INTERRUPT_EN,RF_PUT_MSG_EN,FIELD_CHANGE_EN,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
 }
 
-void test_configGPO_given_all_disable_expect_correct(void)
+void test_configureInterrupt_given_all_disable_expect_correct(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x00};
+  uint8_t expectZero[1] = {0x0};
 
+  I2CRead_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expectZero,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configGPO(password,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
+  configureInterrupt(password,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
 }
 
-void test_configGPO_given_all_enabled_expect_correct(void)
+void test_configureInterrupt_given_all_enabled_expect_correct(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
   uint8_t expect[1] = {0x7f};
+  uint8_t expectZero[1] = {0x0};
 
+  I2CRead_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expectZero,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configGPO(password,RF_USER_EN,RF_ACTIVITY_EN,RF_INTERRUPT_EN,FIELD_CHANGE_EN,RF_PUT_MSG_EN,RF_GET_MSG_EN,RF_WRITE_EN);
+  configureInterrupt(password,RF_USER_EN,RF_ACTIVITY_EN,RF_INTERRUPT_EN,FIELD_CHANGE_EN,RF_PUT_MSG_EN,RF_GET_MSG_EN,RF_WRITE_EN);
 }

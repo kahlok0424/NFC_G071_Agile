@@ -142,12 +142,17 @@ int main(void)
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
-  NFC04A1_setRFMode(password,RF_ENABLE);
-  enableFTM(password);
-  configFTM(password, FTM_ENABLE, 0x00);
+  readDatafromMailbox(0x2018,received, 30);
+  resetMailBox();
+  getMailBoxMessage(received);
+  readDatafromMailbox(0x2018,received, 30);
+  //NFC04A1_setRFMode(password,RF_ENABLE);
+  //enableMailBox(password);
+  //configFastTransferMode(password, FTM_ENABLE, 0x00);
+  //getMailBoxMessage(received);
   HAL_Delay(50);
-  enableGPO(password);
-  configGPO(password,RF_PUT_MSG_EN,GPO_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
+  enableInterrupt(password);
+  configureInterrupt(password,RF_PUT_MSG_EN,GPO_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
   writeSystemMemory(I2CSS,password, 0x00);
   //I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
   I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);

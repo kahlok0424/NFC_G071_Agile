@@ -366,12 +366,15 @@ void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime){
 	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp, 1);
 }
 
-void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
+void resetMailBox(){
 
-	uint8_t temp1[1];
-	temp1[0] = mode;
-	uint8_t temp2[1];
-	temp2[0] = wdgTime;
+	uint8_t temp[2] = {0x00,0x01};
+
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp, 1);
+	I2CWrite(NFC_DYNAMICMEMORY,MB_CTRL_DYN, temp+1, 1);
+}
+
+void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 
 	unlockI2CSecurity(password);
 	if(mode == FTM_ENABLE){
@@ -401,17 +404,40 @@ void waitRFWriteMessage(){
 	uint8_t temp[2];
 	temp[0] = 0x4;
 
-	while( (temp[0] & 0x04) ){
+	while( (temp[0] & RF_PUT_MESSAGE_MASK) ){
 		readDynamicReg(MB_CTRL_DYN,temp);
 		//HAL_Delay(100);
 	}
 	readDynamicReg(MB_LEN_DYN,temp+1);
 }
 
+void writeDatatoMailbox(uint8_t *data, int n){
+
+	I2CWrite(NFC_DYNAMICMEMORY, NFC_MAILBOX, data, n);
+}
+
+/**
+ * Mail box address is only between 0x2008 to 0x2107
+ */
+void readDatafromMailbox(uint16_t address, uint8_t *data, int n){
+
+	I2CRead(NFC_DYNAMICMEMORY, address, data, n);
+}
+
+void getMailBoxStatus(uint8_t *status){
+	I2CRead(NFC_DYNAMICMEMORY, MB_CTRL_DYN, status, 1);
+}
+
 void getMailBoxMessage(uint8_t *data){
 
 	uint8_t temp[1];
+	uint8_t MBstatus[1];
 
+	getMailBoxStatus(MBstatus);
+	while( (MBstatus[0] & RF_PUT_MESSAGE_MASK) != 1 ){
+		getMailBoxStatus(MBstatus);
+		HAL_Delay(500);
+	}
 	readDynamicReg(MB_LEN_DYN,temp);
 	readUserMemory(NFC_MAILBOX,data,temp[0]);
 }

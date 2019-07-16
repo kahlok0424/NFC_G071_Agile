@@ -8,7 +8,7 @@
 #ifndef NFC_H_
 #define NFC_H_
 
-//#include "main.h"
+#include "main.h"
 #include "stdint.h"
 //#include "stm32g0xx_hal_def.h"
 
@@ -66,6 +66,15 @@
 //defines for command
 #define PRESENTPASS		0x09
 #define CHANGEPASS		0x07
+
+//Masking for mail box status register
+#define MAILBOX_ENABLE_MASK				0x01
+#define HOST_PUT_MESSAGE_MASK			0x02
+#define RF_PUT_MESSAGE_MASK				0x04
+#define HOST_MISS_MESSAGE_MASK			0x10
+#define RF_MISS_MESSAGE_MASK			0x20
+#define HOST_CURRENT_MESSAGE_MASK		0x40
+#define RF_CURRENT_MESSAGE_MASK			0x80
 
 //RF mode typedef
 typedef enum rf_mode{
@@ -136,9 +145,13 @@ void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT ar
 void enableMailBox(uint8_t *password);
 void disableMailBox(uint8_t *password);
 void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime);
+void resetMailBox();
 void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
 void waitRFReadMessage();
 void waitRFWriteMessage();
+void readDatafromMailbox(uint16_t address, uint8_t *data, int n);
+void writeDatatoMailbox(uint8_t *data, int n);
+void getMailBoxStatus(uint8_t *status);
 void getMailBoxMessage(uint8_t *data);
 void enableInterrupt(uint8_t *password);
 void disableInterrupt(uint8_t *password);

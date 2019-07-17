@@ -492,6 +492,17 @@ void test_disableMailbox_expect_pass(void)
   disableMailBox(password);
 }
 
+void test_resetMailBox_expect_pass(void){
+
+  uint8_t expectOn[1] = {0x0};
+  uint8_t expectOff[1] = {0x0};
+
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expectOff,1, 1);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expectOn,1, 1);
+
+  resetMailBox();
+}
+
 void test_enableGPO_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};

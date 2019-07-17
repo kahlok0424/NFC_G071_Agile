@@ -156,4 +156,6 @@ void getMailBoxMessage(uint8_t *data);
 void enableInterrupt(uint8_t *password);
 void disableInterrupt(uint8_t *password);
 void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE mode2, INTERRUPT_MODE mode3, INTERRUPT_MODE mode4, INTERRUPT_MODE mode5, INTERRUPT_MODE mode6, INTERRUPT_MODE mode7);
+void enableEnergyHarvest(uint8_t *password);
+void disableEnergyHarvest(uint8_t *password);
 #endif /* NFC_H_ */

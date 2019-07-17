@@ -413,7 +413,14 @@ void waitRFWriteMessage(){
 
 void writeDatatoMailbox(uint8_t *data, int n){
 
-	I2CWrite(NFC_DYNAMICMEMORY, NFC_MAILBOX, data, n);
+	uint8_t MBstatus[1];
+
+	getMailBoxStatus(MBstatus);
+	if( !(MBstatus[0] & RF_PUT_MESSAGE_MASK) && !(MBstatus[0] & HOST_PUT_MESSAGE_MASK) ){
+		I2CWrite(NFC_DYNAMICMEMORY, NFC_MAILBOX, data, n);
+	}else{
+
+	}
 }
 
 /**
@@ -421,7 +428,7 @@ void writeDatatoMailbox(uint8_t *data, int n){
  */
 void readDatafromMailbox(uint16_t address, uint8_t *data, int n){
 
-	I2CRead(NFC_DYNAMICMEMORY, address, data, n);
+	readUserMemory(address, data, n);
 }
 
 void getMailBoxStatus(uint8_t *status){
@@ -434,12 +441,12 @@ void getMailBoxMessage(uint8_t *data){
 	uint8_t MBstatus[1];
 
 	getMailBoxStatus(MBstatus);
-	while( (MBstatus[0] & RF_PUT_MESSAGE_MASK) != 1 ){
-		getMailBoxStatus(MBstatus);
-		HAL_Delay(500);
+	if( (MBstatus[0] & RF_PUT_MESSAGE_MASK) || (MBstatus[0] & HOST_PUT_MESSAGE_MASK) ){
+		readDynamicReg(MB_LEN_DYN,temp);
+		readUserMemory(NFC_MAILBOX,data,(temp[0])+1);
+	}else{
+
 	}
-	readDynamicReg(MB_LEN_DYN,temp);
-	readUserMemory(NFC_MAILBOX,data,temp[0]);
 }
 
 void enableInterrupt(uint8_t *password){
@@ -474,5 +481,25 @@ void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE 
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
 	lockI2CSecurity();
+}
+
+void enableEnergyHarvest(uint8_t *password){
+
+	uint8_t temp[2] = {0x00,0x01};
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,EH_MODE, temp, 1);
+	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,EH_CTRL_DYN, temp+1, 1);
+}
+
+void disableEnergyHarvest(uint8_t *password){
+
+	uint8_t temp[2] = {0x01,0x00};
+
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,EH_MODE, temp, 1);
+	lockI2CSecurity();
+	I2CWrite(NFC_DYNAMICMEMORY,EH_CTRL_DYN, temp+1, 1);
 }
 

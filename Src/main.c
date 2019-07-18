@@ -142,11 +142,11 @@ int main(void)
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
+  setDefaultArea(password);
+  disableMailBox(password);
   readDatafromMailbox(0x2018,received, 30);
-  disableInterrupt(password);
-  disableEnergyHarvest(password);
   resetMailBox();
-  writeDatatoMailbox(buffer2,13);
+  //writeDatatoMailbox(buffer2,13);
   getMailBoxMessage(received);
   readDatafromMailbox(0x2018,received, 30);
   //NFC04A1_setRFMode(password,RF_ENABLE);

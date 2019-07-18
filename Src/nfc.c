@@ -6,7 +6,6 @@
  */
 
 #include "nfc.h"
-//#include "main.h"
 #include "i2c.h"
 //#include "stm32g0xx_hal.h"
 
@@ -363,7 +362,9 @@ void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime){
 
 	uint8_t temp[1];
 	temp[0] = wdgTime;
+	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,MB_WDG, temp, 1);
+	lockI2CSecurity();
 }
 
 void resetMailBox(){
@@ -376,7 +377,6 @@ void resetMailBox(){
 
 void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 
-	unlockI2CSecurity(password);
 	if(mode == FTM_ENABLE){
 		enableMailBox(password);
 	}
@@ -384,7 +384,6 @@ void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime){
 		disableMailBox(password);
 	}
 	setMailBoxTimeout(password, wdgTime);
-	lockI2CSecurity();
 }
 
 void waitRFReadMessage(){
@@ -394,7 +393,7 @@ void waitRFReadMessage(){
 
 	while( (temp[0] & 0x02) ){
 		readDynamicReg(MB_CTRL_DYN,temp);
-		//HAL_Delay(100);
+		//NFC_Delay(100);
 	}
 	readDynamicReg(MB_LEN_DYN,temp+1);
 }
@@ -406,7 +405,7 @@ void waitRFWriteMessage(){
 
 	while( (temp[0] & RF_PUT_MESSAGE_MASK) ){
 		readDynamicReg(MB_CTRL_DYN,temp);
-		//HAL_Delay(100);
+		NFC_Delay(100);
 	}
 	readDynamicReg(MB_LEN_DYN,temp+1);
 }
@@ -441,11 +440,13 @@ void getMailBoxMessage(uint8_t *data){
 	uint8_t MBstatus[1];
 
 	getMailBoxStatus(MBstatus);
-	if( (MBstatus[0] & RF_PUT_MESSAGE_MASK) || (MBstatus[0] & HOST_PUT_MESSAGE_MASK) ){
+	while( !(MBstatus[0] & RF_PUT_MESSAGE_MASK) && !(MBstatus[0] & HOST_PUT_MESSAGE_MASK) ){
+		getMailBoxStatus(MBstatus);
+		NFC_Delay(500);
+	}
+	if((MBstatus[0] & RF_PUT_MESSAGE_MASK) || (MBstatus[0] & HOST_PUT_MESSAGE_MASK)){
 		readDynamicReg(MB_LEN_DYN,temp);
 		readUserMemory(NFC_MAILBOX,data,(temp[0])+1);
-	}else{
-
 	}
 }
 
@@ -502,4 +503,5 @@ void disableEnergyHarvest(uint8_t *password){
 	lockI2CSecurity();
 	I2CWrite(NFC_DYNAMICMEMORY,EH_CTRL_DYN, temp+1, 1);
 }
+
 

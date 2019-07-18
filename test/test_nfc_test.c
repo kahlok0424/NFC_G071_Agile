@@ -494,7 +494,7 @@ void test_disableMailbox_expect_pass(void)
 
 void test_resetMailBox_expect_pass(void){
 
-  uint8_t expectOn[1] = {0x0};
+  uint8_t expectOn[1] = {0x1};
   uint8_t expectOff[1] = {0x0};
 
   I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expectOff,1, 1);
@@ -503,7 +503,43 @@ void test_resetMailBox_expect_pass(void){
   resetMailBox();
 }
 
-void test_enableGPO_expect_pass(void)
+void test_configFastTransferMode_FTM_ENABLE_expect_pass(void)
+{
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[2] = {0x1,0x0};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expect,1, 1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_WDG, expect+1,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+  configFastTransferMode(password, FTM_ENABLE,0x00);
+}
+
+void test_configFastTransferMode_FTM_DISABLE_expect_pass(void)
+{
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[2] = {0x0,0x11};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY,MB_CTRL_DYN, expect,1, 1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_WDG, expect+1,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+  configFastTransferMode(password, FTM_DISABLE,0x11);
+}
+
+void test_enableInterrupt_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -518,7 +554,7 @@ void test_enableGPO_expect_pass(void)
   enableInterrupt(password);
 }
 
-void test_disableGPO_expect_pass(void)
+void test_disableInterrupt_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
   uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
@@ -595,4 +631,34 @@ void test_configureInterrupt_given_all_enabled_expect_correct(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
   configureInterrupt(password,RF_USER_EN,RF_ACTIVITY_EN,RF_INTERRUPT_EN,FIELD_CHANGE_EN,RF_PUT_MSG_EN,RF_GET_MSG_EN,RF_WRITE_EN);
+}
+
+void test_enableEnergyHarvest_expect_pass(void)
+{
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[2] = {0x00,0x01};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, EH_MODE, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY, EH_CTRL_DYN, expect+1,1,1);
+
+  enableEnergyHarvest(password);
+}
+
+void test_disableEnergyHarvest_expect_pass(void)
+{
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[2] = {0x01,0x00};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, EH_MODE, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+  I2CWrite_ExpectWithArray(NFC_DYNAMICMEMORY, EH_CTRL_DYN, expect+1,1,1);
+
+  disableEnergyHarvest(password);
 }

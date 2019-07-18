@@ -8,7 +8,7 @@
 #ifndef NFC_H_
 #define NFC_H_
 
-#include "main.h"
+//#include "main.h"
 #include "stdint.h"
 //#include "stm32g0xx_hal_def.h"
 

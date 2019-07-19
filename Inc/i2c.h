@@ -8,7 +8,6 @@
 #ifndef I2C_H_
 #define I2C_H_
 
-//#include "main.h"
 #include "stdint.h"
 //#include "stm32g0xx_hal_def.h"
 

@@ -145,8 +145,12 @@ int main(void)
   uint8_t area4data[5];
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
-  //HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
-  //enableMailBox(password);
+  HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
+  disableMailBox(password);
+  setDefaultArea(password);
+  setArea(password, 2,6,NA);
+  writeProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
+  readSystemMemory(I2CSS, data,1);
   //configFastTransferMode(password, FTM_ENABLE, 0x00);
   //writeDatatoMailbox(buffer2,13);
   readDatafromMailbox(0x2008,received,30);
@@ -162,29 +166,9 @@ int main(void)
   //getMailBoxMessage(received);
   HAL_Delay(50);
   enableInterrupt(password);
-  configureInterrupt(password,RF_PUT_MSG_EN,GPO_EN,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE,GPO_DISABLE);
+  configureInterrupt(password,RF_PUT_MSG_EN|GPO_EN);
   writeSystemMemory(I2CSS,password, 0x00);
-  //I2CWrite(NFC_USERMEMORY,0x2008,buffer2,13);
   I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);
-  //getMailBoxMessage(received);
-  //I2CRead(NFC_USERMEMORY,0x2008,received,86);
- // I2CRead(NFC_USERMEMORY,0x205e,received,85);
- // I2CRead(NFC_USERMEMORY,0x20b3,received,85);
-  //readI2CPassword(password,received);
-  /*userAreaRWProtection(password, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT, NO_WRITEPROTECT);
-  readSystemMemory(I2CSS, data,1);
-  setArea(password, 2,NA,NA);
-  I2CWrite(NFC_USERMEMORY,62,buffer,5);
-  //I2CWrite(NFC_USERMEMORY,0x80,buffer1,4);
-  //I2CRead(NFC_USERMEMORY,0x7E, test1, 6);
-  readUserMemory(1,0x80,test1,3);
-  lockI2CSecurity();
-  readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
-  //writeSystemMemory(I2CSS,password, 0x55);
-  readDynamicReg(I2C_SSO_DYN,I2CsecurityStatus);
-  writeUserMemory(1, 0x66, buffer, 6);
-  readSystemMemory(I2CSS, data,1);
-  readUserMemory(1, 0x66, test1, 6);*/
 
   /* USER CODE END 2 */
 

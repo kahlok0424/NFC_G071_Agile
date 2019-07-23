@@ -1,7 +1,7 @@
-main.c:74:5:main	392	static
-main.c:207:6:SystemClock_Config	144	static
-main.c:252:13:MX_NVIC_Init	8	static
-main.c:264:13:MX_I2C1_Init	8	static
-main.c:310:13:MX_LPUART1_UART_Init	8	static
-main.c:358:13:MX_GPIO_Init	56	static
-main.c:404:6:Error_Handler	8	static
+main.c:74:5:main	376	static
+main.c:210:6:SystemClock_Config	144	static
+main.c:255:13:MX_NVIC_Init	8	static
+main.c:267:13:MX_I2C1_Init	8	static
+main.c:313:13:MX_LPUART1_UART_Init	8	static
+main.c:361:13:MX_GPIO_Init	56	static
+main.c:407:6:Error_Handler	8	static

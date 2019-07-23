@@ -391,7 +391,7 @@ void test_userAreaRWProtection_given_no_protection(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,NO_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_1_protect(void){
@@ -405,7 +405,7 @@ void test_userAreaRWProtection_given_only_area_1_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,AREA1_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA1_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_2_protect(void){
@@ -419,7 +419,7 @@ void test_userAreaRWProtection_given_only_area_2_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,NO_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA2_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_3_protect(void){
@@ -433,7 +433,7 @@ void test_userAreaRWProtection_given_only_area_3_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA3_WRITEPROTECT,NO_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA3_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_4_protect(void){
@@ -447,7 +447,7 @@ void test_userAreaRWProtection_given_only_area_4_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,NO_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA4_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
@@ -461,7 +461,7 @@ void test_userAreaRWProtection_given_only_area_1_and_area_2_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,NO_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
 }
 
 void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
@@ -475,7 +475,7 @@ void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2CSS, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  userAreaRWProtection(password,AREA1_WRITEPROTECT,AREA2_WRITEPROTECT,NO_WRITEPROTECT,AREA4_WRITEPROTECT);
+  i2CWriteProtectUserArea(password,AREA1_WRITEPROTECT|AREA2_WRITEPROTECT|AREA4_WRITEPROTECT);
 }
 
 void test_enableMailbox_expect_pass(void)
@@ -598,7 +598,7 @@ void test_configureInterrupt_given_RF_USER_EN_and_RF_ACTIVITY_EN_expect_correct(
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configureInterrupt(password,RF_USER_EN,RF_ACTIVITY_EN,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
+  configureInterrupt(password,RF_USER_EN|RF_ACTIVITY_EN);
 }
 
 void test_configureInterrupt_given_RF_INTERRUPT_EN_and_RF_PUT_MSG_EN_and_FIELD_CHANGE_expect_correct(void)
@@ -614,7 +614,7 @@ void test_configureInterrupt_given_RF_INTERRUPT_EN_and_RF_PUT_MSG_EN_and_FIELD_C
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configureInterrupt(password,RF_INTERRUPT_EN,RF_PUT_MSG_EN,FIELD_CHANGE_EN,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
+  configureInterrupt(password,RF_INTERRUPT_EN|RF_PUT_MSG_EN|FIELD_CHANGE_EN);
 }
 
 void test_configureInterrupt_given_all_disable_expect_correct(void)
@@ -630,7 +630,7 @@ void test_configureInterrupt_given_all_disable_expect_correct(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configureInterrupt(password,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED,NOT_USED);
+  configureInterrupt(password,NOT_USED);
 }
 
 void test_configureInterrupt_given_all_enabled_expect_correct(void)
@@ -646,7 +646,7 @@ void test_configureInterrupt_given_all_enabled_expect_correct(void)
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, GPO, expect,1,1);
   I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
 
-  configureInterrupt(password,RF_USER_EN,RF_ACTIVITY_EN,RF_INTERRUPT_EN,FIELD_CHANGE_EN,RF_PUT_MSG_EN,RF_GET_MSG_EN,RF_WRITE_EN);
+  configureInterrupt(password,RF_USER_EN|RF_ACTIVITY_EN|RF_INTERRUPT_EN|FIELD_CHANGE_EN|RF_PUT_MSG_EN|RF_GET_MSG_EN|RF_WRITE_EN);
 }
 
 void test_enableEnergyHarvest_expect_pass(void)

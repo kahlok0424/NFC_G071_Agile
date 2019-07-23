@@ -50,7 +50,7 @@
 #define MEM_SIZE		0x0014
 #define BLK_SIZE		0x0016
 #define IC_REF			0x0017
-#define UID				0x0018
+#define UID_ADDRESS		0x0018
 #define IC_REV			0x0020
 #define I2C_PWD			0x0900
 
@@ -106,13 +106,23 @@ typedef enum gpo_mode{
 	 GPO_DISABLE		= 0x00,
 }GPO_MODE;
 
-typedef enum writeProtect{
+typedef enum i2cwriteProtect{
 	 NO_WRITEPROTECT		= 0x00,
 	 AREA1_WRITEPROTECT 	= 0x01,
 	 AREA2_WRITEPROTECT		= 0x04,
 	 AREA3_WRITEPROTECT		= 0x10,
 	 AREA4_WRITEPROTECT		= 0x40,
-}WRITEPROTECT;
+}I2CWRITEPROTECT;
+
+typedef enum rfwriteProtect{
+	 RFAREA_NOPROTECT 		 	= 0x00,
+	 RFAREA_OPENWITHPASSWORD1 	= 0x01,
+	 RFAREA_OPENWITHPASSWORD2 	= 0x02,
+	 RFAREA_OPENWITHPASSWORD3 	= 0x03,
+	 AREA2_WRITEPROTECT			= 0x04,
+	 AREA3_WRITEPROTECT			= 0x10,
+	 AREA4_WRITEPROTECT			= 0x40,
+}RFWRITEPROTECT;
 
 //defines for others
 #define MAXUSERMEMORYSIZE	512
@@ -132,6 +142,7 @@ void readDynamicReg(uint16_t regAddress, uint8_t *buffer);
 void writeDynamicReg(uint16_t regAddress, uint8_t data);
 void readUserMemory(uint16_t address, uint8_t *data, int n);
 void writeUserMemory(uint16_t address, uint8_t *data, int n);
+void readDeviceUID(uint8_t *uid);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);
 int  checkAreaSizeValidity(int size, int max);
@@ -141,7 +152,7 @@ void set3Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2);
 void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t sizeA3);
 int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
 void setArea(uint8_t *password, int area1, int area2, int area3);
-void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4);
+void i2CWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area);
 void enableMailBox(uint8_t *password);
 void disableMailBox(uint8_t *password);
 void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime);
@@ -155,7 +166,7 @@ void getMailBoxStatus(uint8_t *status);
 void getMailBoxMessage(uint8_t *data);
 void enableInterrupt(uint8_t *password);
 void disableInterrupt(uint8_t *password);
-void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE mode2, INTERRUPT_MODE mode3, INTERRUPT_MODE mode4, INTERRUPT_MODE mode5, INTERRUPT_MODE mode6, INTERRUPT_MODE mode7);
+void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode);
 void enableEnergyHarvest(uint8_t *password);
 void disableEnergyHarvest(uint8_t *password);
 #endif /* NFC_H_ */

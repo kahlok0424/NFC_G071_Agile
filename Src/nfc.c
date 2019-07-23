@@ -168,6 +168,10 @@ void readUserMemory(uint16_t address, uint8_t *data, int n){
 		//waiting to implement
 }
 
+void readDeviceUID(uint8_t *uid){
+	I2CRead(NFC_SYSTEMMEMORY,UID_ADDRESS,uid,8);
+}
+
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode){
 	writeSystemMemory(RF_MNGT, password, mode);
 }
@@ -327,12 +331,23 @@ void setArea(uint8_t *password, int area1, int area2, int area3){
 	lockI2CSecurity();
 }
 
-void userAreaRWProtection(uint8_t *password, WRITEPROTECT area1, WRITEPROTECT area2, WRITEPROTECT area3, WRITEPROTECT area4){
+void i2CWriteProtectUserArea(uint8_t *password, WRITEPROTECT area){
 
 	uint8_t temp[1];
-	temp[0] = (area1 | area2 | area3 | area4 );
+	//temp[0] = (area1 | area2 | area3 | area4 );
+	temp[0] = area;
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,I2CSS, temp, 1);
+	lockI2CSecurity();
+}
+
+void rfWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area){
+
+	uint8_t temp[1];
+	//temp[0] = (area1 | area2 | area3 | area4 );
+	temp[0] = area;
+	unlockI2CSecurity(password);
+	I2CWrite(NFC_SYSTEMMEMORY,RFA1SS, temp, 1);
 	lockI2CSecurity();
 }
 
@@ -472,13 +487,14 @@ void disableInterrupt(uint8_t *password){
 	I2CWrite(NFC_DYNAMICMEMORY,GPO_CTRL_DYN, temp, 1);
 }
 
-void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode1, INTERRUPT_MODE mode2, INTERRUPT_MODE mode3, INTERRUPT_MODE mode4, INTERRUPT_MODE mode5, INTERRUPT_MODE mode6, INTERRUPT_MODE mode7){
+void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode){
 
 	uint8_t temp[1];
 	temp[0] = 0;
 
 	I2CRead(NFC_SYSTEMMEMORY,GPO, temp, 1);
-	temp[0] = mode1 | mode2 | mode3 | mode4 | mode5 | mode6 | mode7 | temp[0];
+	//temp[0] = mode1 | mode2 | mode3 | mode4 | mode5 | mode6 | mode7 | temp[0];
+	temp[0] = mode | temp[0];
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,GPO, temp, 1);
 	lockI2CSecurity();

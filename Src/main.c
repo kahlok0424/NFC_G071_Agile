@@ -149,7 +149,7 @@ int main(void)
   disableMailBox(password);
   setDefaultArea(password);
   setArea(password, 2,6,NA);
-  writeProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
+  i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
   //configFastTransferMode(password, FTM_ENABLE, 0x00);
   //writeDatatoMailbox(buffer2,13);

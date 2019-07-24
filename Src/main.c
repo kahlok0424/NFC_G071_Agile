@@ -147,8 +147,9 @@ int main(void)
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   disableMailBox(password);
-  setDefaultArea(password);
-  setArea(password, 2,6,NA);
+  //setDefaultArea(password);
+  setArea(password, 2,4,6);
+  rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
   i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
   //configFastTransferMode(password, FTM_ENABLE, 0x00);

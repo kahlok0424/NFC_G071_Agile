@@ -331,7 +331,7 @@ void setArea(uint8_t *password, int area1, int area2, int area3){
 	lockI2CSecurity();
 }
 
-void i2CWriteProtectUserArea(uint8_t *password, WRITEPROTECT area){
+void i2CWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area){
 
 	uint8_t temp[1];
 	//temp[0] = (area1 | area2 | area3 | area4 );
@@ -341,13 +341,18 @@ void i2CWriteProtectUserArea(uint8_t *password, WRITEPROTECT area){
 	lockI2CSecurity();
 }
 
-void rfWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area){
+void rfWriteProtectUserArea(uint8_t *password, RFWRITEPROTECT area1, RFWRITEPROTECT area2, RFWRITEPROTECT area3, RFWRITEPROTECT area4){
 
-	uint8_t temp[1];
-	//temp[0] = (area1 | area2 | area3 | area4 );
-	temp[0] = area;
+	uint8_t temp[4];
+	temp[0] = area1;
+	temp[1] = area2;
+	temp[2] = area3;
+	temp[3] = area4;
 	unlockI2CSecurity(password);
 	I2CWrite(NFC_SYSTEMMEMORY,RFA1SS, temp, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,RFA2SS, temp+1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,RFA3SS, temp+2, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,RFA4SS, temp+3, 1);
 	lockI2CSecurity();
 }
 

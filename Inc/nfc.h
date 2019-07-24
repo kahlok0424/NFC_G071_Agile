@@ -119,9 +119,8 @@ typedef enum rfwriteProtect{
 	 RFAREA_OPENWITHPASSWORD1 	= 0x01,
 	 RFAREA_OPENWITHPASSWORD2 	= 0x02,
 	 RFAREA_OPENWITHPASSWORD3 	= 0x03,
-	 AREA2_WRITEPROTECT			= 0x04,
-	 AREA3_WRITEPROTECT			= 0x10,
-	 AREA4_WRITEPROTECT			= 0x40,
+	 RFAREA_WRITEPROTECT		= 0x04,
+	 RFAREA_WRITEFORBIDDEN		= 0x0c,
 }RFWRITEPROTECT;
 
 //defines for others
@@ -153,6 +152,7 @@ void set4Area(uint8_t *password, uint16_t sizeA1, uint16_t sizeA2, uint16_t size
 int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
 void setArea(uint8_t *password, int area1, int area2, int area3);
 void i2CWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area);
+void rfWriteProtectUserArea(uint8_t *password, RFWRITEPROTECT area1, RFWRITEPROTECT area2, RFWRITEPROTECT area3, RFWRITEPROTECT area4);
 void enableMailBox(uint8_t *password);
 void disableMailBox(uint8_t *password);
 void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime);

@@ -478,6 +478,40 @@ void test_userAreaRWProtection_given_area_1_and_area_2_and_area_4_protect(void){
   i2CWriteProtectUserArea(password,AREA1_WRITEPROTECT|AREA2_WRITEPROTECT|AREA4_WRITEPROTECT);
 }
 
+void test_rfWriteProtectUserArea_given_area_1_and_area_2_and_area_4_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[2] = {0x04,0x00};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA1SS, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA2SS, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA3SS, expect+1,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA4SS, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+  rfWriteProtectUserArea(password,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT);
+}
+
+void test_rfWriteProtectUserArea_given_area1_forbiden_area2_no_protect_area3_and_area4_protect(void){
+
+  uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectUnlock[17] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x09,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+  uint8_t expect[3] = {0x0c,0x00,0x04};
+
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA1SS, expect,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA2SS, expect+1,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA3SS, expect+2,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, RFA4SS, expect+2,1,1);
+  I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+  rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
+}
+
 void test_enableMailbox_expect_pass(void)
 {
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};

@@ -19,6 +19,7 @@
 "Drivers/STM32G0xx_HAL_Driver/Src/stm32g0xx_ll_rcc.o"
 "Src/i2c.o"
 "Src/main.o"
+"Src/ndef.o"
 "Src/nfc.o"
 "Src/stm32g0xx_hal_msp.o"
 "Src/stm32g0xx_it.o"

@@ -325,9 +325,9 @@ void setArea(uint8_t *password, int area1, int area2, int area3){
 	}
 
 	unlockI2CSecurity(password);
-	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, areas+2, 1);
-	I2CWrite(NFC_SYSTEMMEMORY,ENDA2, areas+1, 1);
 	I2CWrite(NFC_SYSTEMMEMORY,ENDA1, areas, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA2, areas+1, 1);
+	I2CWrite(NFC_SYSTEMMEMORY,ENDA3, areas+2, 1);
 	lockI2CSecurity();
 }
 

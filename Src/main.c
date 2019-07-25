@@ -26,6 +26,7 @@
 #include "stdint.h"
 #include "nfc.h"
 #include "i2c.h"
+#include "ndef.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -147,7 +148,10 @@ int main(void)
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   disableMailBox(password);
-  //setDefaultArea(password);
+  setDefaultArea(password);
+  i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
+  writeT5TCCFile(ONE_BYTE_ADDRESSING);
+  setArea(password, 4,NA,NA);
   setArea(password, 2,4,6);
   rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
   i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);

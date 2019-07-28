@@ -153,8 +153,8 @@ int main(void)
   writeT5TCCFile(ONE_BYTE_ADDRESSING);
   setArea(password, 4,NA,NA);
   setArea(password, 2,4,6);
-  rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
-  i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
+  //rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
+  //i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
   //configFastTransferMode(password, FTM_ENABLE, 0x00);
   //writeDatatoMailbox(buffer2,13);

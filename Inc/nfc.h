@@ -20,6 +20,10 @@
 #define NFC_LED2_PORT	NFC_LED2_GPIO_Port
 #define NFC_LED3_PORT	NFC_LED3_GPIO_Port
 
+//defines for NFC status
+#define NFC_OK			0x00
+#define NFC_ERROR		0x01
+
 //defines for NFC04A device address
 #define NFC_USERMEMORY		0xA6
 #define NFC_SYSTEMMEMORY	0xAE

@@ -1,1 +1,2 @@
-ndef.c:11:6:writeT5TCCFile	32	static
+ndef.c:13:10:writeT5TCCFile	24	static
+ndef.c:33:10:writeURI	80	static

@@ -147,12 +147,13 @@ int main(void)
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
-  disableMailBox(password);
+  //disableMailBox(password);
   setDefaultArea(password);
   i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
-  writeT5TCCFile(ONE_BYTE_ADDRESSING);
-  setArea(password, 4,NA,NA);
-  setArea(password, 2,4,6);
+  writeURI(buffer1,buffer,buffer2);
+  //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
+  //setArea(password, 4,NA,NA);
+  //setArea(password, 2,4,6);
   //rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
   //i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
@@ -170,8 +171,8 @@ int main(void)
   //configFastTransferMode(password, FTM_ENABLE, 0x00);
   //getMailBoxMessage(received);
   HAL_Delay(50);
-  enableInterrupt(password);
-  configureInterrupt(password,RF_PUT_MSG_EN|GPO_EN);
+  //enableInterrupt(password);
+  //configureInterrupt(password,RF_PUT_MSG_EN|GPO_EN);
   writeSystemMemory(I2CSS,password, 0x00);
   I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);
 

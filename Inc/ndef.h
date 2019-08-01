@@ -30,6 +30,12 @@ typedef struct
   char Information[400];
 }URI_Info;
 
+#define SMART_POSTER_TYPE               "Sp"
+#define SMART_POSTER_TYPE_LENGTH         2
+
+#define URI_TYPE                        "U"
+#define URI_TYPE_LENGTH                  1
+
 #define URI_NONE                 0x00
 #define URI_0x01                 0x01
 #define URI_0x02                 0x02

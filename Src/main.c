@@ -135,18 +135,23 @@ int main(void)
   //uint8_t oldPassword[8] = {0x07,0x07,0x07,0x07,0x08,0x08,0x08,0x08};
   uint8_t password[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x01};
   uint8_t received[256];
-  uint8_t test1[8];
+  // test1[8];
   uint8_t test2[4];
-  uint8_t ENDA[3];
-  uint8_t I2CsecurityStatus[1];
+  //uint8_t ENDA[3];
+  //uint8_t I2CsecurityStatus[1];
   uint8_t data[1];
+
+  //ndef message array
+  char protocol[20] = "https://www.";
+  char link[30] = "google.com";
+  char info[30] = "Google Web";
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   //disableMailBox(password);
   setDefaultArea(password);
   i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
-  writeURI(buffer1,buffer,buffer2);
+  writeURI(protocol,link,info);
   //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
   //setArea(password, 4,NA,NA);
   //setArea(password, 2,4,6);
@@ -154,7 +159,7 @@ int main(void)
   //i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
   readSystemMemory(I2CSS, data,1);
   //configFastTransferMode(password, FTM_ENABLE, 0x00);
-  //writeDatatoMailbox(buffer2,13);
+  writeUserMemory(0x66,buffer,5);
   readDatafromMailbox(0x2008,received,30);
   resetMailBox();
   readDatafromMailbox(0x2008,received, 30);

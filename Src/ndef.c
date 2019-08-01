@@ -32,18 +32,44 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area){
 
 }
 
-uint16_t writeURI(char *protocol, char *link, char *infomation){
+uint16_t writeURI(char *protocol, char *link, char *tittle){
 
-	//URI_Info *pURI;
+	uint8_t ndef[200];
 	uint16_t uriType;
-	uint32_t uriSize;
+	uint32_t uriSize,tittleSize,totalSize, index =0;
+
+	/* An URI can be included in a smart poster to add text to give instruction to user for instance */
+	/*
+	 *  RECORD HEADER | RECORD PAYLOAD
+	 *  -------------------------------
+	 *  RECORD HEADER = FLAGS | TYPE LENGTH | PAYLOAD LENGTH x4 | ID LENGTH | PAYLOAD TYPE | PAYLOAD ID
+	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
+	 *  FLAGS = MB | ME | CF | SR | ID LENGTH | TNF ( Well Known type = 0x01)
+	 */
 
 	uriType = getURIProtocol(protocol);
 
-	  if( uriType != URI_ERROR )
-	    uriSize = 1 + strlen(link);
-	  else /*: 1+protocol+URI else*/
-	    uriSize = 1 + strlen(protocol) + strlen(link);
+	 if( uriType != URI_ERROR )
+	   uriSize = 1 + strlen(link);
+	 else /*: 1+protocol+URI else*/
+	   uriSize = 1 + strlen(protocol) + strlen(link);
+
+	 /*Check if smart poster type is needed*/
+	 if(tittle[0] != '\0'){
+		 tittleSize = 1 + 2 + strlen(tittle);
+		 totalSize = 4 + uriSize + 4 + tittleSize;
+
+		 //Smart Poster Header
+		 if(totalSize > 255){
+
+		 }
+		 else{
+			 ndef[index++] = 0xD1;
+			 ndef[index++] = SMART_POSTER_TYPE_LENGTH;
+			 ndef[index++] = (uint8_t)totalSize;
+		 }
+	 }
+
 
 	 return uriSize;
 }

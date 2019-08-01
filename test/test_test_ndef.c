@@ -70,3 +70,12 @@ void test_ndef_getURIProtocol_given_www_expect_return_uri_error(void)
 
   TEST_ASSERT_EQUAL(URI_ERROR,getURIProtocol(protocol));
 }
+
+void test_ndef_writeURI_given_www_google_com_expect_return_correct(void)
+{
+  char protocol[20] = "https://www.";
+  char link[50] = "google.com";
+  char info[10] = "abc";
+
+  TEST_ASSERT_EQUAL(11,writeURI(protocol,link,info));
+}

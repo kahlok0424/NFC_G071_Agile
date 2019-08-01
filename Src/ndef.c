@@ -6,6 +6,8 @@
  */
 #include "ndef.h"
 #include "nfc.h"
+#include <stdio.h>
+#include <string.h>
 
 /*
  * @brief Ndef area has to be multiple of 8bytes
@@ -33,10 +35,17 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area){
 uint16_t writeURI(char *protocol, char *link, char *infomation){
 
 	//URI_Info *pURI;
-	uint16_t uritype;
+	uint16_t uriType;
+	uint32_t uriSize;
 
-	uritype = getURIProtocol(protocol);
+	uriType = getURIProtocol(protocol);
 
+	  if( uriType != URI_ERROR )
+	    uriSize = 1 + strlen(link);
+	  else /*: 1+protocol+URI else*/
+	    uriSize = 1 + strlen(protocol) + strlen(link);
+
+	 return uriSize;
 }
 
 uint16_t getURIProtocol(char *protocol){

@@ -140,10 +140,6 @@ int main(void)
   uint8_t ENDA[3];
   uint8_t I2CsecurityStatus[1];
   uint8_t data[1];
-  uint8_t area1data[5];
-  uint8_t area2data[5];
-  uint8_t area3data[5];
-  uint8_t area4data[5];
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);

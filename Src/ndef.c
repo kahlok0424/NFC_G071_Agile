@@ -43,8 +43,8 @@ uint16_t writeURI(char *protocol, char *link, char *tittle){
 	 *  RECORD HEADER | RECORD PAYLOAD
 	 *  -------------------------------
 	 *  RECORD HEADER = FLAGS | TYPE LENGTH | PAYLOAD LENGTH x4 | ID LENGTH | PAYLOAD TYPE | PAYLOAD ID
-	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
 	 *  FLAGS = MB | ME | CF | SR | ID LENGTH | TNF ( Well Known type = 0x01)
+	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
 	 */
 
 	uriType = getURIProtocol(protocol);
@@ -61,6 +61,12 @@ uint16_t writeURI(char *protocol, char *link, char *tittle){
 
 		 //Smart Poster Header
 		 if(totalSize > 255){
+			 ndef[index++] = 0xC1;
+			 ndef[index++] = SMART_POSTER_TYPE_LENGTH;
+			 ndef[index++] = (totalSize & 0xFF000000) >> 24;
+			 ndef[index++] = (totalSize & 0x00FF0000) >> 16;
+			 ndef[index++] = (totalSize & 0x0000FF00) >> 8;
+			 ndef[index++] = totalSize & 0x000000FF;
 
 		 }
 		 else{
@@ -68,10 +74,15 @@ uint16_t writeURI(char *protocol, char *link, char *tittle){
 			 ndef[index++] = SMART_POSTER_TYPE_LENGTH;
 			 ndef[index++] = (uint8_t)totalSize;
 		 }
+		 memcpy(&ndef[index] , SMART_POSTER_TYPE,SMART_POSTER_TYPE_LENGTH);
+		 index += SMART_POSTER_TYPE_LENGTH;
+	 }
+	 else{
+
 	 }
 
 
-	 return uriSize;
+	 return (uint16_t)totalSize;
 }
 
 uint16_t getURIProtocol(char *protocol){

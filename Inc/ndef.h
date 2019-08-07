@@ -36,6 +36,12 @@ typedef struct
 #define URI_TYPE                        "U"
 #define URI_TYPE_LENGTH                  1
 
+#define TEXT_TYPE                       "T"
+#define TEXT_TYPE_LENGTH                 1
+
+#define ISO_ENGLISH_CODE               "en"
+#define ISO_ENGLISH_CODE_LENGTH          2
+
 #define URI_NONE                 0x00
 #define URI_0x01                 0x01
 #define URI_0x02                 0x02

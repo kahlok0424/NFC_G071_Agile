@@ -77,6 +77,7 @@ uint8_t *writeURI(char *protocol, char *link, char *tittle){
 		 memcpy(&ndef[index] , SMART_POSTER_TYPE,SMART_POSTER_TYPE_LENGTH);
 		 index += SMART_POSTER_TYPE_LENGTH;
 	 }
+
 	  /* URI header */
 	  ndef[index] = 0x81;
 	  if( uriSize < 256 ) ndef[index] |= 0x10;                      // Set the SR bit
@@ -98,10 +99,38 @@ uint8_t *writeURI(char *protocol, char *link, char *tittle){
 	  memcpy( &ndef[index], URI_TYPE, URI_TYPE_LENGTH );
 	  index += URI_TYPE_LENGTH;
 
-	  ndef[index++] = uriType;
+	  ndef[index++] = uriType;	//the URI identification code of protocol
+	  memcpy( &ndef[index], link, strlen(link) );
+	  index += strlen(link);
+
+	  //Information header
+	  if(tittle[0] != '\0'){
+		  if(tittleSize> 255){
+			  ndef[index++] = 0x41;
+			  ndef[index++] = TEXT_TYPE_LENGTH;
+			  ndef[index++] = (tittleSize & 0xFF000000) >> 24;
+			  ndef[index++] = (tittleSize & 0x00FF0000) >> 16;
+			  ndef[index++] = (tittleSize & 0x0000FF00) >> 8;
+			  ndef[index++] = tittleSize & 0x000000FF;
+		  }
+		  else{
+			  ndef[index++] = 0x51;
+			  ndef[index++] = TEXT_TYPE_LENGTH;
+			  ndef[index++] = tittleSize;
+		  }
+
+		  memcpy( &ndef[index], TEXT_TYPE, TEXT_TYPE_LENGTH );
+		  index+=TEXT_TYPE_LENGTH;
+		  ndef[index++] = ISO_ENGLISH_CODE_LENGTH; /* UTF-8 with x byte language code */
+		  memcpy( &ndef[index], ISO_ENGLISH_CODE, ISO_ENGLISH_CODE_LENGTH );
+		  index += ISO_ENGLISH_CODE_LENGTH;
+
+		  //Information payload
+		  memcpy( &ndef[index], tittle, strlen(tittle) );
+		  index+= strlen(tittle);
+	  }
 
 
-	 //return (uint16_t)totalSize;
 	 return ndef;
 }
 

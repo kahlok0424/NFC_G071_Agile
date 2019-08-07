@@ -32,9 +32,9 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area){
 
 }
 
-uint16_t writeURI(char *protocol, char *link, char *tittle){
+uint8_t *writeURI(char *protocol, char *link, char *tittle){
 
-	uint8_t ndef[200];
+	static uint8_t ndef[200];
 	uint16_t uriType;
 	uint32_t uriSize,tittleSize,totalSize, index =0;
 
@@ -77,12 +77,32 @@ uint16_t writeURI(char *protocol, char *link, char *tittle){
 		 memcpy(&ndef[index] , SMART_POSTER_TYPE,SMART_POSTER_TYPE_LENGTH);
 		 index += SMART_POSTER_TYPE_LENGTH;
 	 }
-	 else{
+	  /* URI header */
+	  ndef[index] = 0x81;
+	  if( uriSize < 256 ) ndef[index] |= 0x10;                      // Set the SR bit
+	  if( tittle[0] == '\0' ) ndef[index] |= 0x40;       // Set the ME bit
+	  index++;
 
-	 }
+	  ndef[index++] = URI_TYPE_LENGTH;
+	  if( uriSize > 255 )
+	  {
+	    ndef[index++] = (uriSize & 0xFF000000) >> 24;
+	    ndef[index++] = (uriSize & 0x00FF0000) >> 16;
+	    ndef[index++] = (uriSize & 0x0000FF00) >> 8;
+	    ndef[index++] = uriSize & 0x000000FF;
+	  }
+	  else
+	  {
+		  ndef[index++] = (uint8_t)uriSize;
+	  }
+	  memcpy( &ndef[index], URI_TYPE, URI_TYPE_LENGTH );
+	  index += URI_TYPE_LENGTH;
+
+	  ndef[index++] = uriType;
 
 
-	 return (uint16_t)totalSize;
+	 //return (uint16_t)totalSize;
+	 return ndef;
 }
 
 uint16_t getURIProtocol(char *protocol){

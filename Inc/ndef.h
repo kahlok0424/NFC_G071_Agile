@@ -124,6 +124,6 @@ typedef struct
 //Function declare
 uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area);
 uint16_t getURIProtocol(char *protocol);
-uint16_t writeURI(char *protocol, char *link, char *infomation);
+uint8_t *writeURI(char *protocol, char *link, char *infomation);
 
 #endif /* NDEF_H_ */

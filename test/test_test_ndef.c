@@ -71,11 +71,24 @@ void test_ndef_getURIProtocol_given_www_expect_return_uri_error(void)
   TEST_ASSERT_EQUAL(URI_ERROR,getURIProtocol(protocol));
 }
 
-void test_ndef_writeURI_given_www_google_com_expect_return_correct(void)
+/*void xtest_ndef_writeURI_given_www_google_com_expect_return_correct(void)
 {
   char protocol[20] = "https://www.";
   char link[50] = "google.com";
   char info[10] = "abc";
+  //uint8_t expected[30] = "0xD1, 0x20";
 
   TEST_ASSERT_EQUAL(11,writeURI(protocol,link,info));
+}*/
+
+void test_ndef_writeURI_given_www_google_com_expect_return_ndef_message(void)
+{
+  char protocol[20] = "https://www.";
+  char link[50] = "google.com";
+  char info[10] = "abc";
+  uint8_t expected[30] = {0xD1,0x02,0x19,0x53,0x70,0x91,0x01,0x0b};
+  uint8_t *result;
+  result = writeURI(protocol,link,info);
+
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,result,6);
 }

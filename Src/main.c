@@ -145,13 +145,14 @@ int main(void)
   char protocol[20] = "https://www.";
   char link[30] = "google.com";
   char info[30] = "Google Web";
+  uint16_t *size= 0;
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   //disableMailBox(password);
   setDefaultArea(password);
   i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
-  writeURI(protocol,link,info);
+  //writeURI(protocol,link,info);
   //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
   //setArea(password, 4,NA,NA);
   //setArea(password, 2,4,6);

@@ -1,3 +1,4 @@
 ndef.c:15:10:writeT5TCCFile	24	static
-ndef.c:35:10:writeURI	256	static
-ndef.c:76:10:getURIProtocol	16	static
+ndef.c:35:10:writeURI	56	static
+ndef.c:137:10:getURIProtocol	16	static
+ndef.c:177:6:writeNdef	32	static

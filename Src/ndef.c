@@ -130,7 +130,7 @@ uint8_t *writeURI(char *protocol, char *link, char *tittle){
 		  index+= strlen(tittle);
 	  }
 
-
+	 //*size = index;
 	 return ndef;
 }
 
@@ -172,5 +172,13 @@ uint16_t getURIProtocol(char *protocol){
 	  else if( !memcmp( protocol, URI_0x22_STRING, strlen(URI_0x22_STRING) ) ) return URI_0x22;
 	  else if( !memcmp( protocol, URI_0x23_STRING, strlen(URI_0x23_STRING) ) ) return URI_0x23;
 	  else return URI_ERROR;
+}
 
+void writeNdef(char *protocol, char *link, char *tittle){
+
+	writeT5TCCFile(ONE_BYTE_ADDRESSING, 512);
+	uint8_t *ndef;
+	uint16_t *size;
+	ndef = writeURI(protocol,link,tittle);
+	writeUserMemory(0x04, ndef, 35);
 }

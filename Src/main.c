@@ -141,17 +141,26 @@ int main(void)
   //uint8_t I2CsecurityStatus[1];
   uint8_t data[1];
 
-  //ndef message array
+  //ndef message array - link
   char protocol[20] = "https://www.";
-  char link[30] = "google.com";
-  char info[30] = "Google Web";
-  uint16_t *size= 0;
+  char link[30] = "youtube.com";
+  char info[30] = "Video Web";
+  //ndef message array of "file"
+  char protocol1[30] = "file://";
+  char link1[150] = "/storage/9016-4EF8/DCIM/Camera/nfc.jpg";
+  char info1[30] = "";
+  //ndef message array of "tel:"
+  char protocol2[30] = "tel::";
+  char link2[50] = "01121312856";
+  char info2[30] = "";
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   //disableMailBox(password);
-  setDefaultArea(password);
-  i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
+  //setDefaultArea(password);
+  //i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
+  //writeURI(protocol1,link1,info1);
+  writeURI(protocol2,link2,info2);
   //writeURI(protocol,link,info);
   //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
   //setArea(password, 4,NA,NA);

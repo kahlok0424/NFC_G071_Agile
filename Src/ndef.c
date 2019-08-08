@@ -32,11 +32,37 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area){
 
 }
 
-uint8_t *writeURI(char *protocol, char *link, char *tittle){
+uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length){
+	/* TLV Block Message*/
+	/*
+	 * The TLV block is behind the cc File byte
+	 * T = tag field = the type of message in tag field, 0x03 = NDEF message
+	 * L = length field = the length of messages in tag field
+	 * V = value of message which is the ndef message
+	 */
+	uint8_t TLV[4];
+	//Tag filed
+	TLV[0] = type;
 
-	static uint8_t ndef[200];
+	//length field
+	if( length >255){
+		TLV[1] = 0xff;
+		TLV[2] = (length & 0xFF00) >> 8;
+		TLV[3] = length & 0x00FF;
+		writeUserMemory(0x04,TLV,4);
+		return 4;
+	}else{
+		TLV[1] = length;
+		writeUserMemory(0x04,TLV,2);
+		return 2;
+	}
+}
+
+uint16_t generateURINdef(char *protocol, char *link, char *tittle, uint8_t *ndef){
+
+	//static uint8_t ndef[200];
 	uint16_t uriType;
-	uint32_t uriSize,tittleSize,totalSize, index =0;
+	uint32_t uriSize=0,tittleSize=0,totalSize=0, index =0;
 
 	/* An URI can be included in a smart poster to add text to give instruction to user for instance */
 	/*
@@ -80,7 +106,7 @@ uint8_t *writeURI(char *protocol, char *link, char *tittle){
 
 	  /* URI header */
 	  ndef[index] = 0x81;
-	  if( uriSize < 256 ) ndef[index] |= 0x10;                      // Set the SR bit
+	  if( uriSize < 256 ) ndef[index] |= 0x10;           // Set the SR bit
 	  if( tittle[0] == '\0' ) ndef[index] |= 0x40;       // Set the ME bit
 	  index++;
 
@@ -130,8 +156,7 @@ uint8_t *writeURI(char *protocol, char *link, char *tittle){
 		  index+= strlen(tittle);
 	  }
 
-	 //*size = index;
-	 return ndef;
+	 return (uint16_t)index;
 }
 
 uint16_t getURIProtocol(char *protocol){
@@ -174,11 +199,13 @@ uint16_t getURIProtocol(char *protocol){
 	  else return URI_ERROR;
 }
 
-void writeNdef(char *protocol, char *link, char *tittle){
+void writeURI(char *protocol, char *link, char *tittle){
 
 	writeT5TCCFile(ONE_BYTE_ADDRESSING, 512);
-	uint8_t *ndef;
-	uint16_t *size;
-	ndef = writeURI(protocol,link,tittle);
-	writeUserMemory(0x04, ndef, 35);
+	uint8_t ndef[250];
+	uint16_t size;
+	uint8_t offset;
+	size = generateURINdef(protocol,link,tittle,ndef);
+	offset= writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,size);
+	writeUserMemory((0x04+offset), ndef, size);
 }

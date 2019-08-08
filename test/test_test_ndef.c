@@ -71,7 +71,7 @@ void test_ndef_getURIProtocol_given_www_expect_return_uri_error(void)
   TEST_ASSERT_EQUAL(URI_ERROR,getURIProtocol(protocol));
 }
 
-void test_ndef_writeURI_given_www_google_com_expect_return_ndef_message(void)
+void test_ndef_generateURINdef_given_www_google_com_expect_return_ndef_message(void)
 {
   char protocol[20] = "https://www.";
   char link[50] = "google.com";
@@ -79,13 +79,15 @@ void test_ndef_writeURI_given_www_google_com_expect_return_ndef_message(void)
   uint8_t expected[31] = {0xD1,0x02,0x19,0x53,0x70,0x91,0x01,0x0b,0x55,0x02,0x67,0x6f,0x6f,0x67,0x6c,0x65,
     0x2e,0x63,0x6f,0x6d,0x51,0x01,0x06,0x54,0x02,0x65,0x6e,0x61,0x62,0x63};
   uint8_t *result;
-  uint16_t *size;
-  result = writeURI(protocol,link,info);
+  uint8_t ndef[200];
+  uint16_t size;
+  size = generateURINdef(protocol,link,info,ndef);
 
-  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,result,30);
+  TEST_ASSERT_EQUAL_UINT16(30,size);
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,ndef,30);
 }
 
-void test_ndef_writeURI_given_www_google_com_no_tittle_expect_return_ndef_message(void)
+void test_ndef_generateURINdef_given_www_google_com_no_tittle_expect_return_ndef_message(void)
 {
   char protocol[20] = "https://www.";
   char link[50] = "google.com";
@@ -93,8 +95,54 @@ void test_ndef_writeURI_given_www_google_com_no_tittle_expect_return_ndef_messag
   uint8_t expected[31] = {0xD1,0x01,0x0b,0x55,0x02,0x67,0x6f,0x6f,0x67,0x6c,0x65,
     0x2e,0x63,0x6f,0x6d};
   uint8_t *result;
-  uint16_t *size;
-  result = writeURI(protocol,link,info);
+  uint8_t ndef[200];
+  uint16_t size;
+  size = generateURINdef(protocol,link,info,ndef);
 
-  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,result,15);
+  TEST_ASSERT_EQUAL_UINT16(15,size);
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,ndef,15);
+}
+
+void test_ndef_generateURINdef_given_www_youtube_com_tittle_expect_return_ndef_message(void)
+{
+  char protocol[20] = "https://www.";
+  char link[50] = "youtube.com";
+  char info[10] = "Video Web";
+  uint8_t expected[31] = {0xD1,0x01,0x0b,0x55,0x02,0x67,0x6f,0x6f,0x67,0x6c,0x65,
+    0x2e,0x63,0x6f,0x6d};
+  uint8_t *result;
+  uint8_t ndef[200];
+  uint16_t size;
+  size = generateURINdef(protocol,link,info,ndef);
+
+  TEST_ASSERT_EQUAL_UINT16(37,size);
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,ndef,15);
+}
+
+void test_ndef_generateURINdef_given_file_path_expect_return_ndef_message(void)
+{
+  char protocol[30] = "file://";
+  char link[150] = "/storage/emulated/0/bluetooth/Screenshot_2015-04-15-15-01-58.png";
+  char info[30] = "";
+  uint8_t expected[31] = {0xD1,0x01,0x41,0x55,29,0x67,0x6f,0x6f,0x67,0x6c,0x65,
+    0x2e,0x63,0x6f,0x6d};
+  uint8_t *result;
+  uint8_t ndef[200];
+  uint16_t size;
+  size = generateURINdef(protocol,link,info,ndef);
+
+  TEST_ASSERT_EQUAL_UINT16(69,size);
+  TEST_ASSERT_EQUAL_UINT8_ARRAY(expected,ndef,15);
+}
+
+void test_ndef_writeT5TLVBlock_given_tag5_ndef_format_expect_return_2(void)
+{
+  uint16_t size;
+  uint8_t expect[4] = {0x03,25};
+
+  I2CWrite_ExpectWithArray(NFC_USERMEMORY, 0x04, expect,2,2);
+
+  size = writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,25);
+
+  TEST_ASSERT_EQUAL_UINT16(2,size);
 }

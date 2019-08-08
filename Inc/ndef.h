@@ -23,6 +23,22 @@ typedef enum addressing_mode{
 	 TWO_BYTE_ADDRESSING		= 0xe2,
 }ADDRESSING_MODE;
 
+/* TLV Block Types */
+/*
+ * Block Type    Value  Description
+ * ------------- -----  --------------------------------------
+ * NULL          0x00   These blocks should be ignored
+ * NDEF Message  0x03   Block contains an NDEF message
+ * Proprietary   0xFD   Block contains proprietary information
+ * Terminator    0xFE   Last TLV block in the data area
+ */
+typedef enum {
+	NFC_TAG5_TLV_IGNORE			= ((uint8_t) 0x00),
+	NFC_TAG5_TLV_NDEF_MSG		= ((uint8_t) 0x03),
+	NFC_TAG5_TLV_INFO_MSG		= ((uint8_t) 0xFD),
+	NFC_TAG5_TLV_LAST_BLOCK		= ((uint8_t) 0xFE),
+}TAG5_TLV;
+
 typedef struct
 {
   char protocol[80];
@@ -130,6 +146,8 @@ typedef struct
 //Function declare
 uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area);
 uint16_t getURIProtocol(char *protocol);
-uint8_t *writeURI(char *protocol, char *link, char *infomation);
+uint16_t generateURINdef(char *protocol, char *link, char *infomation, uint8_t *ndef);
+uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length);
+void writeURI(char *protocol, char *link, char *tittle);
 
 #endif /* NDEF_H_ */

@@ -133,8 +133,6 @@ typedef enum rfwriteProtect{
 
 //functions declaration
 //void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress); //comment for development
-void I2CRead(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
-void I2CWrite(uint16_t devAddress, uint16_t memAddress, uint8_t *data, int n);
 void unlockI2CSecurity(uint8_t *password);
 void lockI2CSecurity();
 void changeI2CPassword(uint8_t *oldPass, uint8_t *newPassword);
@@ -143,8 +141,8 @@ void readSystemMemory(uint16_t regAddress, uint8_t *buffer,int n);
 void writeSystemMemory(uint16_t regAddress,uint8_t *password, uint8_t data);
 void readDynamicReg(uint16_t regAddress, uint8_t *buffer);
 void writeDynamicReg(uint16_t regAddress, uint8_t data);
-void readUserMemory(uint16_t address, uint8_t *data, int n);
-void writeUserMemory(uint16_t address, uint8_t *data, int n);
+void readUserMemory(uint16_t address, uint8_t *data, uint16_t n);
+void writeUserMemory(uint16_t address, uint8_t *data, uint16_t n);
 void readDeviceUID(uint8_t *uid);
 void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
 void NFC04A1_setRFModeDyn(RF_MODE mode);

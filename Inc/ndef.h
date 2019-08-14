@@ -145,9 +145,11 @@ typedef struct
 
 //Function declare
 uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area);
-uint16_t getURIProtocol(char *protocol);
-uint16_t generateURINdef(char *protocol, char *link, char *infomation, uint8_t *ndef);
+uint16_t getUriProtocol(char *protocol);
+uint16_t generateUriNdef(char *protocol, char *link, char *infomation, uint8_t *ndef);
+uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *ndef);
 uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length);
-void writeURI(char *protocol, char *link, char *tittle);
+void writeUri(char *protocol, char *link, char *tittle);
+void writeMailto(char *email, char *subject, char *body);
 
 #endif /* NDEF_H_ */

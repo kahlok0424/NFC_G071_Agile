@@ -1,5 +1,7 @@
 ndef.c:15:10:writeT5TCCFile	24	static
 ndef.c:35:9:writeT5TLVBlock	24	static
-ndef.c:61:10:generateURINdef	56	static
-ndef.c:162:10:getURIProtocol	16	static
-ndef.c:202:6:writeURI	296	static
+ndef.c:61:10:generateUriNdef	56	static
+ndef.c:162:10:generateMailtoNdef	64	static
+ndef.c:225:10:getUriProtocol	16	static
+ndef.c:265:6:writeURI	296	static
+ndef.c:276:6:writeMailto	248	static

@@ -149,10 +149,9 @@ void writeDynamicReg(uint16_t regAddress, uint8_t data){
  * @param pointer to data to write
  * @param number of bytes to write
  */
-void writeUserMemory(uint16_t address, uint8_t *data, int n){
+void writeUserMemory(uint16_t address, uint8_t *data, uint16_t n){
 
 		I2CWrite(NFC_USERMEMORY, address, data, n);
-		//waiting to implement
 }
 
 /**
@@ -162,7 +161,7 @@ void writeUserMemory(uint16_t address, uint8_t *data, int n){
  * @param pointer to data to read
  * @param number of bytes to read
  */
-void readUserMemory(uint16_t address, uint8_t *data, int n){
+void readUserMemory(uint16_t address, uint8_t *data, uint16_t n){
 
 		I2CRead(NFC_USERMEMORY, address, data, n);
 		//waiting to implement

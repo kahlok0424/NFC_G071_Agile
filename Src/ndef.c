@@ -25,7 +25,7 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area){
 		//byte 1 = NFC forum tag type V version , v 1.0
 		buffer[1] = NFCT5_VERSION_V1_0;
 		//byte 2 = additional features, Multiple block read command = 0x01
-		buffer[3] = 0x01;
+		buffer[3] = 0x00;
 		writeUserMemory(0x00,buffer,4);
 		return NDEF_OK;
 	}
@@ -58,7 +58,7 @@ uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length){
 	}
 }
 
-uint16_t generateURINdef(char *protocol, char *link, char *tittle, uint8_t *ndef){
+uint16_t generateUriNdef(char *protocol, char *link, char *tittle, uint8_t *ndef){
 
 	//static uint8_t ndef[200];
 	uint16_t uriType;
@@ -73,7 +73,7 @@ uint16_t generateURINdef(char *protocol, char *link, char *tittle, uint8_t *ndef
 	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
 	 */
 
-	uriType = getURIProtocol(protocol);
+	uriType = getUriProtocol(protocol);
 
 	 if( uriType != URI_ERROR )
 	   uriSize = 1 + strlen(link);
@@ -159,7 +159,70 @@ uint16_t generateURINdef(char *protocol, char *link, char *tittle, uint8_t *ndef
 	 return (uint16_t)index;
 }
 
-uint16_t getURIProtocol(char *protocol){
+uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *ndef){
+
+	char msg1[10] = "subject=";
+	char msg2[8] = "body=";
+	uint32_t uriSize=0, index =0;
+
+	/* An URI can be included in a smart poster to add text to give instruction to user for instance */
+	/*
+	 *  RECORD HEADER | RECORD PAYLOAD
+	 *  -------------------------------
+	 *  RECORD HEADER = FLAGS | TYPE LENGTH | PAYLOAD LENGTH x4 | ID LENGTH | PAYLOAD TYPE | PAYLOAD ID
+	 *  FLAGS = MB | ME | CF | SR | ID LENGTH | TNF ( Well Known type = 0x01)
+	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
+	 */
+
+	   uriSize = 8 + strlen(email) + strlen(subject) + strlen(body) + 15;
+
+	  /* URI header */
+	  ndef[index] = 0xc1;
+	  if( uriSize < 256 ) ndef[index] |= 0x10;           // Set the SR bit
+	  index++;
+
+	  ndef[index++] = URI_TYPE_LENGTH;
+	  if( uriSize > 255 )
+	  {
+	    ndef[index++] = (uriSize & 0xFF000000) >> 24;
+	    ndef[index++] = (uriSize & 0x00FF0000) >> 16;
+	    ndef[index++] = (uriSize & 0x0000FF00) >> 8;
+	    ndef[index++] = uriSize & 0x000000FF;
+	  }
+	  else
+	  {
+		  ndef[index++] = (uint8_t)uriSize;
+	  }
+
+	  memcpy( &ndef[index], URI_TYPE, URI_TYPE_LENGTH );
+	  index += URI_TYPE_LENGTH;
+
+	  ndef[index++] = 0x00;
+	  //the URI identification code of mailto:
+	  memcpy( &ndef[index], URI_0x06_STRING, strlen(URI_0x06_STRING) );
+	  index += strlen(URI_0x06_STRING);
+
+	  memcpy( &ndef[index], email, strlen(email) );
+	  index += strlen(email);
+
+	  //begin of subject message
+	  ndef[index++] = 0x3f; //"?"
+	  memcpy( &ndef[index], msg1, strlen(msg1));
+	  index += strlen(msg1);
+	  memcpy( &ndef[index], subject, strlen(subject));
+	  index += strlen(subject);
+
+	  //Begin of body message
+	  ndef[index++] = 0x26;  //"&"
+	  memcpy( &ndef[index], msg2, strlen(msg2));
+	  index += strlen(msg2);
+	  memcpy( &ndef[index], body, strlen(body));
+	  index += strlen(body);
+
+	 return (uint16_t)index;
+}
+
+uint16_t getUriProtocol(char *protocol){
 
 	  if( !memcmp( protocol, URI_0x01_STRING, strlen(URI_0x01_STRING) ) ) return URI_0x01;
 	  else if( !memcmp( protocol, URI_0x02_STRING, strlen(URI_0x02_STRING) ) ) return URI_0x02;
@@ -205,7 +268,19 @@ void writeURI(char *protocol, char *link, char *tittle){
 	uint8_t ndef[250];
 	uint16_t size;
 	uint8_t offset;
-	size = generateURINdef(protocol,link,tittle,ndef);
+	size = generateUriNdef(protocol,link,tittle,ndef);
+	offset= writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,size);
+	writeUserMemory((0x04+offset), ndef, size);
+}
+
+void writeMailto(char *email, char *subject, char *body){
+
+	uint8_t ndef[200];
+	uint16_t size;
+	uint8_t offset;
+
+	writeT5TCCFile(ONE_BYTE_ADDRESSING, 512);
+	size = generateMailtoNdef(email,subject,body,ndef);
 	offset= writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,size);
 	writeUserMemory((0x04+offset), ndef, size);
 }

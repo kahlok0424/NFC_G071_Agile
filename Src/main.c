@@ -153,29 +153,34 @@ int main(void)
   char protocol2[30] = "tel::";
   char link2[50] = "01121312856";
   char info2[30] = "";
+  //ndef message array of mailto:
+  char email[30] = "kahlok0424@gmail.com";
+  char subject[10] = "Test";
+  char body[50] = "nfc email testing";
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
   //disableMailBox(password);
   //setDefaultArea(password);
   //i2CWriteProtectUserArea(password, NO_WRITEPROTECT);
-  //writeURI(protocol1,link1,info1);
-  writeURI(protocol2,link2,info2);
   //writeURI(protocol,link,info);
+  //writeURI(protocol1,link1,info1);
+  //writeURI(protocol2,link2,info2);
+  writeMailto(email,subject,body);
   //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
   //setArea(password, 4,NA,NA);
   //setArea(password, 2,4,6);
   //rfWriteProtectUserArea(password,RFAREA_WRITEFORBIDDEN,RFAREA_NOPROTECT,RFAREA_WRITEPROTECT,RFAREA_WRITEPROTECT);
   //i2CWriteProtectUserArea(password, AREA1_WRITEPROTECT|AREA2_WRITEPROTECT);
-  readSystemMemory(I2CSS, data,1);
-  //configFastTransferMode(password, FTM_ENABLE, 0x00);
+  /*readSystemMemory(I2CSS, data,1);
+  configFastTransferMode(password, FTM_ENABLE, 0x00);
   writeUserMemory(0x66,buffer,5);
   readDatafromMailbox(0x2008,received,30);
   resetMailBox();
   readDatafromMailbox(0x2008,received, 30);
   writeDatatoMailbox(buffer2,13);
   writeDatatoMailbox(buffer1,5);
-  getMailBoxMessage(received);
+  getMailBoxMessage(received);*/
   //readDatafromMailbox(0x2018,received, 30);
   //NFC04A1_setRFMode(password,RF_ENABLE);
   //enableMailBox(password);
@@ -184,8 +189,6 @@ int main(void)
   HAL_Delay(50);
   //enableInterrupt(password);
   //configureInterrupt(password,RF_PUT_MSG_EN|GPO_EN);
-  writeSystemMemory(I2CSS,password, 0x00);
-  I2CRead(NFC_USERMEMORY, MB_LEN_DYN,test2,1);
 
   /* USER CODE END 2 */
 

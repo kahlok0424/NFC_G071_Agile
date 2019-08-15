@@ -2,6 +2,8 @@ ndef.c:15:10:writeT5TCCFile	24	static
 ndef.c:35:9:writeT5TLVBlock	24	static
 ndef.c:61:10:generateUriNdef	56	static
 ndef.c:162:10:generateMailtoNdef	64	static
-ndef.c:225:10:getUriProtocol	16	static
-ndef.c:265:6:writeURI	296	static
-ndef.c:276:6:writeMailto	248	static
+ndef.c:225:10:generateLaunchAppNdef	56	static
+ndef.c:259:10:getUriProtocol	16	static
+ndef.c:299:6:writeURI	296	static
+ndef.c:310:6:writeMailto	296	static
+ndef.c:322:6:writeLaunchApp	192	static

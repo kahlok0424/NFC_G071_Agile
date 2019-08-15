@@ -156,7 +156,9 @@ int main(void)
   //ndef message array of mailto:
   char email[30] = "kahlok0424@gmail.com";
   char subject[10] = "Test";
-  char body[50] = "nfc email testing";
+  char body[65] = "hello world we are the world, test sending email with content";
+  //ndef message array of launch android apps
+  char appName[50] = "com.supercell.clashofclans";
 
   //initNFC(&hi2c1, NFC_USERMEMORY);
   HAL_GPIO_WritePin(NFC_LED1_GPIO_Port,NFC_LED1_Pin,0);
@@ -166,6 +168,7 @@ int main(void)
   //writeURI(protocol,link,info);
   //writeURI(protocol1,link1,info1);
   //writeURI(protocol2,link2,info2);
+  //writeLaunchApp(appName);
   writeMailto(email,subject,body);
   //writeT5TCCFile(ONE_BYTE_ADDRESSING,512);
   //setArea(password, 4,NA,NA);

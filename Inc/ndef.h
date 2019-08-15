@@ -46,6 +46,15 @@ typedef struct
   char Information[400];
 }URI_Info;
 
+#define NDEF_TNF_EMPTY					0x0
+#define NDEF_TNF_WELL_KNOWN				0x1
+#define NDEF_TNF_MIME_MEDIA_TYPE		0x2
+#define NDEF_TNF_ABSOLUTE_URI			0x3
+#define NDEF_TNF_EXTERNAL				0x4
+#define NDEF_TNF_UNKNOWN				0x5
+#define NDEF_TNF_UNCHANGE				0x6
+#define NDEF_TNF_RESERVED				0x7
+
 #define SMART_POSTER_TYPE               "Sp"
 #define SMART_POSTER_TYPE_LENGTH         2
 
@@ -133,6 +142,10 @@ typedef struct
 #define URI_0x22_STRING          "urn:epc:\0"
 #define URI_0x23_STRING          "urn:nfc:\0"
 
+//External Type Name format
+#define NDEF_ANDROID_PKG_TYPE			"android.com:pkg"
+#define NDEF_ANDROID_PKG_TYPE_LENGTH	15
+
 //Capability container version 1.0 */
 #define NFCT5_VERSION_V1_0		0x40
 
@@ -148,8 +161,10 @@ uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area);
 uint16_t getUriProtocol(char *protocol);
 uint16_t generateUriNdef(char *protocol, char *link, char *infomation, uint8_t *ndef);
 uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *ndef);
+uint16_t generateLaunchAppNdef(char *app, uint8_t *ndef);
 uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length);
 void writeUri(char *protocol, char *link, char *tittle);
 void writeMailto(char *email, char *subject, char *body);
+void writeLaunchApp(char *app);
 
 #endif /* NDEF_H_ */

@@ -151,7 +151,19 @@ void writeDynamicReg(uint16_t regAddress, uint8_t data){
  */
 void writeUserMemory(uint16_t address, uint8_t *data, uint16_t n){
 
-		I2CWrite(NFC_USERMEMORY, address, data, n);
+	/*uint8_t temp[200];
+
+	for(int i = 0; i < n;i++){
+		temp[i] = data+i;
+	}*/
+
+		if(n>=60){
+			I2CWrite(NFC_USERMEMORY, address, data, 60);
+			NFC_Delay(100);
+			I2CWrite(NFC_USERMEMORY, address+60, data+60, (n-60));
+		}else{
+			I2CWrite(NFC_USERMEMORY, address, data, n);
+		}
 }
 
 /**

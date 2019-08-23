@@ -15,6 +15,48 @@ void tearDown(void)
 {
 }
 
+void test_NFC_test_writeSystemMemory_expect_correct(void)
+{
+    uint8_t password[8] = {0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09};
+    uint8_t expectUnlock[17] = {0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09,0x09,0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09};
+    uint8_t expectLock[17] = {0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0a};
+
+    uint8_t expect[1] = {0xff};
+
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectUnlock,17,17);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, MB_MODE, expect,1,1);
+    I2CWrite_ExpectWithArray(NFC_SYSTEMMEMORY, I2C_PWD, expectLock,17,17);
+
+    writeSystemMemory(MB_MODE,password,0xff);
+}
+
+void test_NFC_test_readSystemMemory_expect_correct(void)
+{
+    uint8_t password[8] = {0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09};
+    uint8_t correct[17] = {0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09,0x09,0x02,0x02,0x04,0x04,0x06,0x06,0x08,0x09};
+    uint8_t result[1] = {0x00};
+
+    I2CRead_ExpectWithArray(NFC_SYSTEMMEMORY, EH_MODE, result,1,1);
+
+    readSystemMemory(EH_MODE,result,1);
+}
+
+void test_writeUserMemory_given_more_than_60_data_to_sent(void)
+{
+  char data[80] = "testing to send email with content and is larger than 60 words";
+  char expect1[61] = "testing to send email with content and is larger than 60 wor";
+  char expect2[30] = "ds";
+
+  printf("total string = %d",strlen(data));
+  printf("\nfirst string = %d",strlen(expect1));
+  printf("\nsecond string = %d",strlen(expect2));
+  I2CWrite_ExpectWithArray(NFC_USERMEMORY, 0x00, expect1,60,60);
+  NFC_Delay_Expect(100);
+  I2CWrite_ExpectWithArray(NFC_USERMEMORY, 0x003c, expect2,10,10);
+
+  writeUserMemory(0x00,data,70);
+}
+
 void test_NFC_test_unlockI2CSecurity_given_correct_password(void)
 {
     uint8_t password[8] = {0x01,0x02,0x03,0x04,0x09,0x08,0x77,0x66};

@@ -87,7 +87,7 @@ uint16_t generateUriNdef(char *protocol, char *link, char *tittle, uint8_t *ndef
 
 		 //Smart Poster Header
 		 if(totalSize > 255){
-			 ndef[index++] = 0xC1;
+			 ndef[index++] = 0xC0 | NDEF_TNF_WELL_KNOWN;
 			 ndef[index++] = SMART_POSTER_TYPE_LENGTH;
 			 ndef[index++] = (totalSize & 0xFF000000) >> 24;
 			 ndef[index++] = (totalSize & 0x00FF0000) >> 16;
@@ -96,7 +96,7 @@ uint16_t generateUriNdef(char *protocol, char *link, char *tittle, uint8_t *ndef
 
 		 }
 		 else{
-			 ndef[index++] = 0xD1;
+			 ndef[index++] = 0xD0 | NDEF_TNF_WELL_KNOWN;
 			 ndef[index++] = SMART_POSTER_TYPE_LENGTH;
 			 ndef[index++] = (uint8_t)totalSize;
 		 }
@@ -177,7 +177,7 @@ uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *nde
 	   uriSize = 8 + strlen(email) + strlen(subject) + strlen(body) + 15;
 
 	  /* URI header */
-	  ndef[index] = 0xc1;
+	  ndef[index] = 0xc0 | NDEF_TNF_WELL_KNOWN;
 	  if( uriSize < 256 ) ndef[index] |= 0x10;           // Set the SR bit
 	  index++;
 
@@ -218,6 +218,40 @@ uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *nde
 	  index += strlen(msg2);
 	  memcpy( &ndef[index], body, strlen(body));
 	  index += strlen(body);
+
+	 return (uint16_t)index;
+}
+
+uint16_t generateLaunchAppNdef(char *app, uint8_t *ndef){
+
+	char msg1[20] = "android.com:pkg";
+	uint32_t appSize=0, index =0;
+
+	/* An URI can be included in a smart poster to add text to give instruction to user for instance */
+	/*
+	 *  RECORD HEADER | RECORD PAYLOAD
+	 *  -------------------------------
+	 *  RECORD HEADER = FLAGS | TYPE LENGTH | PAYLOAD LENGTH x4 | ID LENGTH | PAYLOAD TYPE | PAYLOAD ID
+	 *  FLAGS = MB | ME | CF | SR | ID LENGTH | TNF ( Well Known type = 0x01)
+	 *  PAY LOAD TYPE = "U": URI 0x55, "T": test 0x54, "Sp": smart poster 0x5370
+	 */
+
+	  appSize = strlen(app);
+
+	  /* URI header */
+	  ndef[index] = 0xD0 | NDEF_TNF_EXTERNAL;
+	  //if( appSize < 256 ) ndef[index] |= 0x10;           // Set the SR bit
+	  index++;
+
+	  ndef[index++] = NDEF_ANDROID_PKG_TYPE_LENGTH;
+	  ndef[index++] = (uint8_t)appSize;
+
+	  memcpy( &ndef[index], NDEF_ANDROID_PKG_TYPE, NDEF_ANDROID_PKG_TYPE_LENGTH );
+	  index += NDEF_ANDROID_PKG_TYPE_LENGTH;
+
+	  //the pay load of app name that needs to be launched
+	  memcpy( &ndef[index], app, strlen(app) );
+	  index += strlen(app);
 
 	 return (uint16_t)index;
 }
@@ -275,12 +309,24 @@ void writeURI(char *protocol, char *link, char *tittle){
 
 void writeMailto(char *email, char *subject, char *body){
 
-	uint8_t ndef[200];
+	uint8_t ndef[250];
 	uint16_t size;
 	uint8_t offset;
 
 	writeT5TCCFile(ONE_BYTE_ADDRESSING, 512);
 	size = generateMailtoNdef(email,subject,body,ndef);
+	offset= writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,size);
+	writeUserMemory((0x04+offset), ndef, size);
+}
+
+void writeLaunchApp(char *app){
+
+	uint8_t ndef[150];
+	uint16_t size;
+	uint8_t offset;
+
+	writeT5TCCFile(ONE_BYTE_ADDRESSING, 512);
+	size = generateLaunchAppNdef(app,ndef);
 	offset= writeT5TLVBlock(NFC_TAG5_TLV_NDEF_MSG,size);
 	writeUserMemory((0x04+offset), ndef, size);
 }

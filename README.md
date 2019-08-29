@@ -41,15 +41,120 @@ git clone https://github.com/kahlok0424/NFC_G071_Agile.git
 
 ## Features
 
-- Complete functions to configure NFC Tag
+- Functions to configure NFC Tag
 - Uses STM32 HAL Library
 - Generate NDEF Messages and write into Tag.
 - Able to tell the android phone what to do when tap on the NFC tag. (etc. write email, call someone, open up application....)
+- Partialy working Fast Transfer Mode
+- External interrupt
+- Energy Harvesting
 
-## Functions and how to use.
+## Functions and Usage
 
+### Initialize the NFC tag
 
+```c
+void initNFC(uint16_t devAddress);
+```
 
+Using this function will initialize the NFC tag by checking is the NFC tag available or not, it yes , the leds on NFC tag will all light up, else it will not light up.
+
+### Read and Write into the NFC tag
+
+```c
+void readSystemMemory(uint16_t regAddress, uint8_t *buffer,int n);
+void writeSystemMemory(uint16_t regAddress,uint8_t *password, uint8_t data);
+void readDynamicReg(uint16_t regAddress, uint8_t *buffer);
+void writeDynamicReg(uint16_t regAddress, uint8_t data);
+void readUserMemory(uint16_t address, uint8_t *data, uint16_t n);
+void writeUserMemory(uint16_t address, uint8_t *data, uint16_t n);
+```
+
+There are several functions to read or write into the NFC tag, each with different purpose and the purpose is clear by reading the function name.
+
+### Unlock or lock I2C security session of NFC tag and Change I2C password
+```c
+void unlockI2CSecurity(uint8_t *password);
+void lockI2CSecurity();
+void changeI2CPassword(uint8_t *oldPass, uint8_t *newPassword);
+```
+By factory setting, the default password of this NFC TAG (ST25DV04K) is 0x00000000.
+
+### Configure the NFC Tag
+```c
+void NFC04A1_setRFMode(uint8_t *password, RF_MODE mode);
+void NFC04A1_setRFModeDyn(RF_MODE mode);
+void enableInterrupt(uint8_t *password);
+void disableInterrupt(uint8_t *password);
+void configureInterrupt(uint8_t *password, INTERRUPT_MODE mode);
+void enableEnergyHarvest(uint8_t *password);
+void disableEnergyHarvest(uint8_t *password);
+```
+The function above are to configure the NFC tag's extra features. More details of what the function do is written in the source code.
+
+### Configure User Area
+```c
+int  validateArea(uint8_t area1, uint8_t area2, uint8_t area3);
+void setDefaultArea(uint8_t *password);
+void setArea(uint8_t *password, int area1, int area2, int area3);
+```
+The user area of st25dv04k can be separated into areas (maximum are 4). Each area can have different size but the total size of all area must be 512bytes and size of each area has to be multiple of 32bytes.
+- Example
+```c
+/* Code to set into 3 areas */
+void setArea(password, 64, 32, NA);
+/* This code will set the user area into 3, which area1 is 64bytes, area2 is 32bytes, and area 3 is the rest of the user memory( 512 - 64 - 32 = 416). Size of area 3 is 416bytes. */
+```
+
+The user area can also be write protected using this function:
+```c
+void i2CWriteProtectUserArea(uint8_t *password, I2CWRITEPROTECT area);
+void rfWriteProtectUserArea(uint8_t *password, RFWRITEPROTECT area1, RFWRITEPROTECT area2, RFWRITEPROTECT area3, RFWRITEPROTECT area4);
+```
+If the area is write protected, it can only be written when the I2C security session is opened.
+
+### Fast Transfer Mode (Mail Box)
+```c
+void enableMailBox(uint8_t *password);
+void disableMailBox(uint8_t *password);
+void setMailBoxTimeout(uint8_t *password, uint8_t wdgTime);
+void resetMailBox();
+void configFastTransferMode(uint8_t *password, FTM_MODE mode, uint8_t wdgTime);
+void readDatafromMailbox(uint16_t address, uint8_t *data, int n); /* needed to improve */
+void writeDatatoMailbox(uint8_t *data, int n); /*needed to improve */
+void getMailBoxStatus(uint8_t *status);
+```
+The functions above are to setup the mailbox of this NTF Tag. The mailbox has 256bytes of memory and is not using the EEPROM.
+The fast transfer mode allow android user to direct take data from the mailbox, but however this tag is designed in such a way that andoid user need to send out a mailbox read command throught radio frequency in order to access the mailbox. Currently only the app (st25) developed by STMicroelectronics can send the command. This FTM is not applicable for other NFC tag read applications.
+
+## NDEF
+```c
+uint16_t writeT5TCCFile(ADDRESSING_MODE address_mode, uint16_t ndef_area);
+uint8_t writeT5TLVBlock(TAG5_TLV type,uint16_t length);
+uint16_t getUriProtocol(char *protocol);
+uint16_t generateUriNdef(char *protocol, char *link, char *infomation, uint8_t *ndef);
+uint16_t generateMailtoNdef(char *email, char *subject, char *body, uint8_t *ndef);
+uint16_t generateLaunchAppNdef(char *app, uint8_t *ndef);
+```
+The function above are used to build out the functions to write into the NFC Tag. Where the CC file and T5TLV block are the needed block to descripe the format of the NDEF message, so that the android phone knows how to decode the NDEF message. These format are published by the NFC Forum [link](https://nfc-forum.org/) and the tag we are using here is NFC FORUM TYPE 5 TAG.  
+
+```c
+void writeUri(char *protocol, char *link, char *tittle);
+void writeMailto(char *email, char *subject, char *body);
+void writeLaunchApp(char *app);
+```
+These functions will encode the message that user wants to tell the android phone throught NFC tapping into a NDEF formatted messages and write into the NFC Tag.
+
+- Example
+```c
+  /* ndef message array of mailto: */
+  char email[30] = "kahlok0424@gmail.com";
+  char subject[10] = "Test";
+  char body[65] = "hello world we are the world, test sending email with content";
+  
+  writeMailto(email,subject,body);
+```
+This example will write the encoded NDEF message into the tag and when is tapped by NFC-enabled android phone, it will bring out the email app with written content as shwon below:
 
 
 ## Running the tests

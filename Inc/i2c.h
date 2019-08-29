@@ -14,5 +14,8 @@
 void I2CRead(uint16_t devAddress,uint16_t memAddress, uint8_t *data, uint16_t n);
 void I2CWrite(uint16_t devAddress,uint16_t memAddress, uint8_t *data, uint16_t n);
 void NFC_Delay(uint32_t delay);
+int deviceReady(uint16_t devADdress);
+//void gpio_WritePin(int port, int led, int value);
+void initNFC(uint16_t devAddress);
 
 #endif /* I2C_H_ */

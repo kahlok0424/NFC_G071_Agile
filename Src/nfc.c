@@ -9,19 +9,6 @@
 #include "i2c.h"
 //#include "stm32g0xx_hal.h"
 
-/*void initNFC(I2C_HandleTypeDef *hi2c, uint16_t devAddress){
-
-	if(HAL_I2C_IsDeviceReady(hi2c, devAddress,3,50) == 0){
-		HAL_GPIO_WritePin(NFC_LED1_PORT,NFC_LED1,1);
-		//HAL_GPIO_WritePin(NFC_LED2_PORT,NFC_LED2,1);
-	}
-	else{
-		HAL_GPIO_WritePin(NFC_LED1_PORT,NFC_LED1,0);
-		HAL_GPIO_WritePin(NFC_LED1_PORT,NFC_LED2,0);
-		HAL_GPIO_WritePin(NFC_LED2_PORT,NFC_LED3,0);
-	}
-}*/
-
 /**
  * @description present the i2c password and unlock i2c security session
  * @param password

@@ -143,72 +143,36 @@ void writeUri(char *protocol, char *link, char *tittle);
 void writeMailto(char *email, char *subject, char *body);
 void writeLaunchApp(char *app);
 ```
-These functions will encode the message that user wants to tell the android phone throught NFC tapping into a NDEF formatted messages and write into the NFC Tag.
+These functions will encode the message that user wants to tell the android phone throught NFC tapping into a NDEF formatted messages and write into the NFC Tag. These functions will be implemented more in the future.
 
 - Example
 ```c
   /* ndef message array of mailto: */
-  char email[30] = "kahlok0424@gmail.com";
+  char email[30] = "testing123@gmail.com";
   char subject[10] = "Test";
-  char body[65] = "hello world we are the world, test sending email with content";
+  char body[65] = "hello world, I'm testing with NFC tag to send email with content.";
   
   writeMailto(email,subject,body);
 ```
-This example will write the encoded NDEF message into the tag and when is tapped by NFC-enabled android phone, it will bring out the email app with written content as shwon below:
+This example will write the encoded NDEF message into the tag and when is tapped by NFC-enabled android phone, it will bring out the email app with written content as shown below:
 
+<img src = "https://github.com/kahlok0424/NFC_G071_Agile/blob/master/Images/Screenshot_20190829_230414_com.android.email.jpg" width="600" height="800">
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+The tests of this project run using ceedling. In order to run the test code, you will need to install ceedling and once you have done. Simply open up `Git bash` in your repository and run this command `ceedling test:all` . Your result will be as same as shown below:
 
-### Break down into end to end tests
+<img src = "https://github.com/kahlok0424/NFC_G071_Agile/blob/master/Images/test%20result.PNG" >
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+You can refer to the test code by pressing this [link](https://github.com/kahlok0424/NFC_G071_Agile/tree/master/test}.
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Lau Kah Lok** - *Initial work* - [KahLok0424](https://github.com/kahlok0424)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+## References
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
-
-
+1. STM32G071 Reference Manual PDF by STMicroelectronics [link](https://www.st.com/content/ccc/resource/technical/document/reference_manual/group0/2f/21/cb/33/78/80/42/64/DM00371828/files/DM00371828.pdf/jcr:content/translations/en.DM00371828.pdf)
+2. ST25DV04k Manual PDF [link](https://www.st.com/resource/en/datasheet/st25dv64k.pdf)
+3. STMicroelectronics NDEF Management Manual PDF [link](https://www.st.com/content/ccc/resource/technical/document/application_note/group0/21/49/e4/1a/37/dc/4f/e4/DM00328901/files/DM00328901.pdf/jcr:content/translations/en.DM00328901.pdf)
+4. Other Website [link](https://learn.adafruit.com/adafruit-pn532-rfid-nfc/ndef)
